@@ -1,26 +1,159 @@
 @import "tailwindcss";
 
+/* Class-based dark mode — next-themes sets .dark on <html> */
+@variant dark (&:where(.dark, .dark *));
+
+/* Semantic surfaces — light default, dark = Datayon navy branding */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f0ebe0;
+  --ink: #0d1b2a;
+  --border: #d4cbc0;
+  --muted: #5c6b78;
+  --warm: #8a7a6a;
+  --art: #e4dcd0;
+  --surface: #f7f3ec;
+  --surface-elevated: #fffcf7;
+  --cyan-tint: rgba(58, 143, 163, 0.1);
+  --hero-glow: rgba(58, 143, 163, 0.14);
+  --ring-teal: rgba(58, 143, 163, 0.45);
+}
+
+.dark {
+  --paper: #0c1622;
+  --ink: #f2ebe3;
+  --border: #1e3348;
+  --muted: #9aacb8;
+  --warm: #8899a8;
+  --art: #111d2c;
+  --surface: #0f1a28;
+  --surface-elevated: #152536;
+  --cyan-tint: rgba(58, 143, 163, 0.12);
+  --hero-glow: rgba(58, 143, 163, 0.2);
+  --ring-teal: rgba(90, 180, 195, 0.35);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-navy: #0d1b2a;
+  --color-navy-deep: #060e18;
+  --color-navy-mid: #0f2336;
+  --color-navy2: #1a2e42;
+  --color-cream: #f0ebe0;
+  --color-teal: #3a8fa3;
+  --color-teal-dark: #2a6f80;
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-warm: var(--warm);
+  --color-art: var(--art);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-cyanlt: #d0eaf0;
+
+  --font-sans: var(--font-dm), ui-sans-serif, system-ui, sans-serif;
+  /** Logo + wordmark — matches Branding Facebook lockups */
+  --font-brand: var(--font-hind), "Hind Siliguri", system-ui, sans-serif;
+  /** Prose / প্রবন্ধ — Tiro Bangla (Bangla literary serif, long-form) */
+  --font-article: var(--font-tiro-bn), "Tiro Bangla", serif;
+  --font-display: var(--font-noto-serif-bn), "Noto Serif Bengali", serif;
+  --font-body: var(--font-noto-bn), "Noto Sans Bengali", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), var(--font-sans), system-ui, sans-serif;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Bengali body: comfortable measure & rhythm */
+.font-body {
+  font-feature-settings: "kern" 1;
+}
+
+.font-display {
+  font-feature-settings: "kern" 1;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+
+/* Editorial hero & section backgrounds */
+.bg-editorial-hero {
+  background:
+    radial-gradient(ellipse 90% 70% at 100% -10%, var(--hero-glow), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 0% 100%, rgba(13, 27, 42, 0.04), transparent 45%),
+    linear-gradient(180deg, var(--surface-elevated) 0%, var(--paper) 100%);
+}
+
+.dark .bg-editorial-hero {
+  background:
+    radial-gradient(ellipse 90% 70% at 100% 0%, var(--hero-glow), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 0% 100%, rgba(58, 143, 163, 0.06), transparent 45%),
+    linear-gradient(180deg, var(--surface) 0%, var(--paper) 100%);
+}
+
+.bg-magazine-band {
+  background: linear-gradient(
+    135deg,
+    rgba(58, 143, 163, 0.09) 0%,
+    rgba(13, 27, 42, 0.03) 48%,
+    rgba(58, 143, 163, 0.06) 100%
+  );
+}
+
+.dark .bg-magazine-band {
+  background: linear-gradient(
+    135deg,
+    rgba(58, 143, 163, 0.12) 0%,
+    rgba(15, 35, 54, 0.5) 50%,
+    rgba(13, 27, 42, 0.85) 100%
+  );
+}
+
+/* Article / editorial long-form (Tiro Bangla) */
+.prose-bn {
+  max-width: 40rem;
+  font-family: var(--font-article), var(--font-body), serif;
+  line-height: 1.95;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+}
+
+.prose-bn p {
+  margin-bottom: 1.25rem;
+}
+
+/* Subtle noise overlay (CSS-only) */
+.texture-grain {
+  position: relative;
+}
+.texture-grain::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.dark .texture-grain::after {
+  opacity: 0.06;
 }

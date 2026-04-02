@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Datayon — বাংলা প্রযুক্তি ম্যাগাজিন
 
-## Getting Started
+Official web site for **ডেটায়ন** (`datayon.bd`): responsive, SEO-friendly, Appwrite-ready.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, React 19)
+- **TypeScript**
+- **Tailwind CSS v4** — light default, optional dark (navy) via `next-themes`
+- **Appwrite** — `appwrite` (browser) + `node-appwrite` (server)
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local
+# Edit .env.local with your Appwrite endpoint, project ID, and API key when ready.
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command        | Description        |
+| -------------- | ------------------ |
+| `npm run dev`  | Development server |
+| `npm run build`| Production build   |
+| `npm run start`| Run production     |
+| `npm run lint` | ESLint             |
 
-## Learn More
+## Project layout
 
-To learn more about Next.js, take a look at the following resources:
+- `src/app/` — routes (`/`, `/magazine`, `/articles`, `/about`)
+- `src/components/` — layout, brand, UI
+- `src/lib/brand.ts` — colours, name, tagline
+- `src/lib/appwrite/` — server & browser clients (wire after you share Appwrite details)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Branding
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Colours: navy `#0d1b2a`, cream `#f0ebe0`, teal `#3a8fa3`. Logo: **dot-grid mark** (`LogoMark`). Fonts (same as datayon-pcard): **DM Sans**, **Noto Serif Bengali** (display), **Noto Sans Bengali** (body).
