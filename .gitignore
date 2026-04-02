@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# Magazine PDF/cover export (see npm run magazine:pdf)
+/magazine-dist/
+
 # production
 /build
 
