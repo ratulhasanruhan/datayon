@@ -14,6 +14,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  /** Windows: stable file watching when `.next` or sources are locked by AV / sync. */
+  webpack: (config, { dev }) => {
+    if (dev && process.platform === "win32") {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
