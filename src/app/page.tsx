@@ -4,11 +4,13 @@ import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/layout/Container";
+import { ArticleCategoryNav } from "@/components/articles/ArticleCategoryNav";
 import { ArticleCover } from "@/components/articles/ArticleCover";
 import { LogoMark } from "@/components/brand/LogoMark";
 import { HomeMagazineIssues } from "@/components/home/HomeMagazineIssues";
+import { SiteSearchForm } from "@/components/search/SiteSearchForm";
 import { SectionLabel } from "@/components/layout/SectionLabel";
-import { getFeaturedArticles, getIssues } from "@/lib/appwrite/queries";
+import { getArticles, getIssues } from "@/lib/appwrite/queries";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
 import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import { SITE_DESCRIPTION, SITE_DESCRIPTION_EN } from "@/lib/seo/site";
@@ -26,7 +28,7 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function HomePage() {
   const configured = isAppwriteConfigured();
   const [articles, magazineIssues] = await Promise.all([
-    getFeaturedArticles(6),
+    getArticles(6),
     configured ? getIssues(24) : Promise.resolve([]),
   ]);
 
@@ -36,15 +38,34 @@ export default async function HomePage() {
         className="relative overflow-hidden border-b border-border/80 bg-editorial-hero texture-grain"
         aria-labelledby="intro-heading"
       >
+        {/* Depth: soft glow + fine grid */}
         <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_60%_at_100%_-20%,rgba(58,143,163,0.14),transparent_55%)] dark:bg-[radial-gradient(ellipse_85%_55%_at_100%_0%,rgba(58,143,163,0.12),transparent_50%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_70%_-15%,rgba(58,143,163,0.16),transparent_55%)] dark:bg-[radial-gradient(ellipse_75%_50%_at_80%_0%,rgba(58,143,163,0.14),transparent_52%)]"
           aria-hidden
         />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.35] dark:opacity-[0.2]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(58,143,163,0.06) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(58,143,163,0.06) 1px, transparent 1px)
+            `,
+            backgroundSize: "48px 48px",
+            maskImage:
+              "radial-gradient(ellipse 70% 65% at 50% 40%, black 15%, transparent 70%)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -left-24 bottom-0 h-[min(380px,50vh)] w-[min(380px,50vw)] rounded-full bg-teal/[0.07] blur-3xl dark:bg-teal/[0.09]"
+          aria-hidden
+        />
+        {/* Top-right soft orb (brand glow) */}
         <div
           className="pointer-events-none absolute -right-16 top-1/2 h-[min(420px,55vw)] w-[min(420px,55vw)] -translate-y-1/2 rounded-full bg-teal/[0.06] blur-3xl dark:bg-teal/[0.08] sm:-right-10 md:right-[8%]"
           aria-hidden
         />
-        {/* Watermark */}
+        {/* Faint mark — transparent watermark, top-left */}
         <div
           className="pointer-events-none absolute -left-8 top-2 opacity-[0.07] dark:opacity-[0.05] sm:-left-16 sm:top-4 sm:opacity-[0.1] md:-left-20"
           aria-hidden
@@ -52,43 +73,52 @@ export default async function HomePage() {
           <LogoMark size={200} variant="on-light" />
         </div>
 
-        <Container className="relative py-10 sm:py-14 lg:py-20">
-          <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-            <div className="min-w-0">
-              <SectionLabel>{BRAND.name} · ম্যাগাজিন</SectionLabel>
-              <h1
-                id="intro-heading"
-                className="mt-4 max-w-xl font-brand text-[1.65rem] font-bold leading-[1.18] tracking-tight text-ink sm:mt-5 sm:text-4xl sm:leading-[1.2] md:text-[2.65rem]"
-              >
-                {BRAND.tagline}
-              </h1>
-              <p className="mt-4 max-w-lg font-body text-[15px] leading-relaxed text-muted sm:mt-5 sm:text-lg">
-                প্রতি মাসে একটি সমৃদ্ধ সংখ্যা, সঙ্গে নিয়মিত অনলাইন বিশ্লেষণ ও খবর — বাংলায়
-                প্রযুক্তির গল্প, পরিষ্কার ভাষায়।
-              </p>
-              <div className="mt-8 flex w-full max-w-md flex-col gap-2.5 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-                <Button href="/magazine" variant="primary" className="w-full justify-center sm:w-auto">
-                  মাসিক সংখ্যা
-                </Button>
-                <Button href="/articles" variant="ghost" className="w-full justify-center sm:w-auto">
-                  সব আর্টিকেল
-                </Button>
-              </div>
+        <Container className="relative py-12 sm:py-16 lg:py-24">
+          <div className="mx-auto max-w-3xl lg:max-w-[42rem]">
+            <SectionLabel accent={false} className="pl-0">
+              {BRAND.name} · ম্যাগাজিন
+            </SectionLabel>
+            <h1
+              id="intro-heading"
+              className="mt-5 font-brand text-[1.85rem] font-bold leading-[1.14] tracking-tight text-ink text-balance sm:mt-6 sm:text-4xl sm:leading-[1.12] md:text-[2.75rem] md:leading-[1.1]"
+            >
+              {BRAND.tagline}
+            </h1>
+            <p className="mt-5 max-w-xl font-body text-[15px] leading-relaxed text-muted sm:mt-6 sm:text-lg">
+              প্রতি মাসে একটি সমৃদ্ধ সংখ্যা, সঙ্গে নিয়মিত অনলাইন বিশ্লেষণ ও খবর — বাংলায়
+              প্রযুক্তির গল্প, পরিষ্কার ভাষায়।
+            </p>
+            <ul
+              className="mt-6 flex flex-wrap gap-2 sm:mt-7"
+              aria-label="কভারেজ থিম"
+            >
+              {["মাসিক সংখ্যা", "স্টার্টআপ ও AI", "নীতি ও সংস্কৃতি"].map((label) => (
+                <li
+                  key={label}
+                  className="rounded-full border border-border/70 bg-surface-elevated/90 px-3 py-1.5 font-sans text-[11px] font-medium tracking-wide text-muted shadow-sm ring-1 ring-border/30 dark:border-navy2/80 dark:bg-navy-mid/40 dark:ring-navy2/50 sm:text-xs"
+                >
+                  {label}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-7 max-w-xl sm:mt-8">
+              <SiteSearchForm id="hero-site-search" />
             </div>
-
-            {/* Mobile: compact horizontal strip; lg+: square card */}
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="flex w-full max-w-md flex-row items-center gap-4 rounded-2xl border border-border/60 bg-surface-elevated/95 px-4 py-4 shadow-[0_12px_40px_-12px_rgba(13,27,42,0.18)] ring-1 ring-teal/10 dark:border-navy2/90 dark:bg-navy-mid/50 dark:ring-teal/15 dark:shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)] sm:max-w-lg sm:gap-5 sm:px-6 sm:py-5 lg:aspect-square lg:max-w-[320px] lg:flex-col lg:items-center lg:justify-center lg:gap-5 lg:p-8 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
-                <LogoMark size={88} variant="on-light" className="shrink-0" />
-                <div className="min-w-0 flex-1 text-left lg:text-center">
-                  <p className="font-brand text-base font-semibold text-ink dark:text-cream sm:text-lg">
-                    ডেটায়ন
-                  </p>
-                  <p className="mt-1 font-brand text-xs font-medium leading-snug text-muted sm:text-sm">
-                    {BRAND.tagline}
-                  </p>
-                </div>
-              </div>
+            <div className="mt-8 flex w-full max-w-lg flex-row flex-wrap items-center gap-3 sm:mt-10">
+              <Button
+                href="/magazine"
+                variant="primary"
+                className="min-h-[48px] min-w-0 flex-1 justify-center px-4 py-3 sm:min-h-0 sm:flex-none sm:px-6 sm:py-2.5"
+              >
+                মাসিক সংখ্যা
+              </Button>
+              <Button
+                href="/articles"
+                variant="ghost"
+                className="min-h-[48px] min-w-0 flex-1 justify-center px-4 py-3 sm:min-h-0 sm:flex-none sm:px-6 sm:py-2.5"
+              >
+                সব আর্টিকেল
+              </Button>
             </div>
           </div>
         </Container>
@@ -149,6 +179,11 @@ export default async function HomePage() {
             </Link>
           </div>
 
+          <ArticleCategoryNav
+            activeSlug={null}
+            className="mb-8 sm:mb-10"
+          />
+
           {articles.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border bg-surface/50 px-6 py-12 text-center dark:bg-navy-mid/20">
               <p className="font-body text-sm text-muted">
@@ -162,7 +197,14 @@ export default async function HomePage() {
           ) : (
             <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-5">
               {articles.map((item, i) => (
-                <li key={item.id} className="min-w-0">
+                <li
+                  key={item.id}
+                  className={cn(
+                    "min-w-0",
+                    /* Below lg: four cards; lg+: six cards (3×2) */
+                    i >= 4 && "hidden lg:block"
+                  )}
+                >
                   <article
                     className={cn(
                       "group relative flex h-full flex-col overflow-hidden rounded-xl border border-border/70 bg-surface-elevated/95 shadow-sm ring-1 ring-border/40 transition",

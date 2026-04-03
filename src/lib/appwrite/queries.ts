@@ -1,4 +1,5 @@
 import { Query } from "node-appwrite";
+import { categoryFieldValuesForFilter } from "@/lib/articles/categories";
 import { getDatabases } from "@/lib/appwrite/server";
 import {
   APPWRITE_DATABASE_ID,
@@ -22,9 +23,43 @@ async function safeList<T>(
 }
 
 type ArticleListOptions = {
-  /** Exact `category` field value in Appwrite (Bengali label) */
+  /** Canonical Bengali label — `categoryFieldValuesForFilter` may match legacy rows */
   category?: string;
+  /** Substring match on `title` or `excerpt` (Appwrite `contains`) */
+  search?: string;
 };
+
+function categoryClause(label: string) {
+  const values = categoryFieldValuesForFilter(label);
+  return values.length === 1
+    ? Query.equal("category", values[0])
+    : Query.or(values.map((v) => Query.equal("category", v)));
+}
+
+function searchClause(term: string) {
+  const t = term.trim().slice(0, 200);
+  if (!t) return null;
+  return Query.or([Query.contains("title", t), Query.contains("excerpt", t)]);
+}
+
+function articleListQueries(
+  limit: number,
+  options?: ArticleListOptions
+): string[] {
+  const filters: string[] = [];
+  if (options?.category) {
+    filters.push(categoryClause(options.category));
+  }
+  const search = searchClause(options?.search ?? "");
+  if (search) {
+    filters.push(search);
+  }
+  return [
+    ...filters,
+    Query.orderDesc("published_at"),
+    Query.limit(limit),
+  ];
+}
 
 export async function getArticles(
   limit = 24,
@@ -33,13 +68,7 @@ export async function getArticles(
   if (!isAppwriteConfigured()) return [];
   return safeList(async () => {
     const db = getDatabases();
-    const q = options?.category
-      ? [
-          Query.equal("category", options.category),
-          Query.orderDesc("published_at"),
-          Query.limit(limit),
-        ]
-      : [Query.orderDesc("published_at"), Query.limit(limit)];
+    const q = articleListQueries(limit, options);
     const res = await db.listDocuments(APPWRITE_DATABASE_ID, COLLECTION_ARTICLES, q);
     return res.documents.map(mapArticleDoc);
   }, []);
@@ -55,7 +84,7 @@ export async function getFeaturedArticles(
     const featuredQueries = options?.category
       ? [
           Query.equal("featured", true),
-          Query.equal("category", options.category),
+          categoryClause(options.category),
           Query.orderDesc("published_at"),
           Query.limit(limit),
         ]
@@ -77,7 +106,7 @@ export async function getFeaturedArticles(
       COLLECTION_ARTICLES,
       options?.category
         ? [
-            Query.equal("category", options.category),
+            categoryClause(options.category),
             Query.orderDesc("published_at"),
             Query.limit(limit),
           ]
@@ -112,6 +141,41 @@ export async function getIssues(limit = 12): Promise<MagazineIssue[]> {
     );
     return res.documents.map(mapIssueDoc);
   }, []);
+}
+
+export type IssueSearchOptions = {
+  search: string;
+};
+
+/** Substring search on headline, excerpt, cover line, month label, issue number */
+export async function searchIssues(
+  limit = 24,
+  options: IssueSearchOptions
+): Promise<MagazineIssue[]> {
+  if (!isAppwriteConfigured()) return [];
+  const clause = issueSearchClause(options.search);
+  if (!clause) return [];
+  return safeList(async () => {
+    const db = getDatabases();
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID, COLLECTION_ISSUES, [
+      clause,
+      Query.orderDesc("sort_order"),
+      Query.limit(limit),
+    ]);
+    return res.documents.map(mapIssueDoc);
+  }, []);
+}
+
+function issueSearchClause(term: string) {
+  const t = term.trim().slice(0, 200);
+  if (!t) return null;
+  return Query.or([
+    Query.contains("headline", t),
+    Query.contains("excerpt", t),
+    Query.contains("cover_line", t),
+    Query.contains("month_label", t),
+    Query.contains("issue_number", t),
+  ]);
 }
 
 /** সংখ্যা ০১ · এপ্রিল ২০২৬ (issue_number `০১`). */

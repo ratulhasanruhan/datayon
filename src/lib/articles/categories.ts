@@ -8,14 +8,21 @@ export const ARTICLE_CATEGORY_ENTRIES = [
   { slug: "interview", label: "সাক্ষাৎকার" },
   { slug: "policy", label: "নীতি" },
   { slug: "ai", label: "AI" },
-  { slug: "education", label: "শিক্ষা" },
+  { slug: "skill", label: "স্কিল" },
+  { slug: "ayojon", label: "আয়োজন" },
 ] as const;
 
 export type ArticleCategorySlug = (typeof ARTICLE_CATEGORY_ENTRIES)[number]["slug"];
 
+/** Old URL `?category=education` → `skill` (শিক্ষা renamed to স্কিল). */
+const LEGACY_SLUG_ALIASES: Record<string, ArticleCategorySlug> = {
+  education: "skill",
+};
+
 export function getCategoryLabelBySlug(slug: string | undefined | null): string | null {
   if (!slug) return null;
-  const found = ARTICLE_CATEGORY_ENTRIES.find((c) => c.slug === slug);
+  const resolved = LEGACY_SLUG_ALIASES[slug] ?? slug;
+  const found = ARTICLE_CATEGORY_ENTRIES.find((c) => c.slug === resolved);
   return found ? found.label : null;
 }
 
@@ -23,5 +30,17 @@ export function getCategoryLabelBySlug(slug: string | undefined | null): string 
 export function getCategorySlugFromLabel(label: string): string | null {
   const t = label.trim();
   const found = ARTICLE_CATEGORY_ENTRIES.find((c) => c.label === t);
-  return found ? found.slug : null;
+  if (found) return found.slug;
+  /** Legacy Appwrite value before rename to স্কিল */
+  if (t === "শিক্ষা") return "skill";
+  return null;
+}
+
+/**
+ * Appwrite `category` field values to match for a canonical label (handles renames).
+ * @see getArticles — uses OR when more than one value
+ */
+export function categoryFieldValuesForFilter(label: string): string[] {
+  if (label === "স্কিল") return ["স্কিল", "শিক্ষা"];
+  return [label];
 }

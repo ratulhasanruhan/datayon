@@ -6,13 +6,18 @@ import { cn } from "@/lib/cn";
 
 type Props = {
   activeSlug?: string | null;
+  /** Extra classes for the nav wrapper (e.g. home vs archive spacing) */
+  className?: string;
 };
 
 /** Filter chips: `/articles` and `/articles?category=<slug>` */
-export function ArticleCategoryNav({ activeSlug }: Props) {
+export function ArticleCategoryNav({ activeSlug, className }: Props) {
   return (
     <nav
-      className="mb-10 flex flex-wrap gap-2 border-b border-border/60 pb-6"
+      className={cn(
+        "mb-10 flex flex-wrap gap-2 border-b border-border/60 pb-6",
+        className
+      )}
       aria-label="বিভাগ অনুযায়ী আর্টিকেল"
     >
       <CategoryChip href="/articles" active={!activeSlug}>

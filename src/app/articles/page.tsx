@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArticleCover } from "@/components/articles/ArticleCover";
 import { ArticleCategoryNav } from "@/components/articles/ArticleCategoryNav";
 import { Container } from "@/components/layout/Container";
 import { SectionLabel } from "@/components/layout/SectionLabel";
+import { SiteSearchForm } from "@/components/search/SiteSearchForm";
 import { getCategoryLabelBySlug } from "@/lib/articles/categories";
 import { getArticles } from "@/lib/appwrite/queries";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
@@ -12,7 +14,7 @@ import { buildPageMetadata } from "@/lib/seo/page-metadata";
 export const revalidate = 120;
 
 type PageProps = {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; q?: string }>;
 };
 
 export async function generateMetadata({
@@ -42,8 +44,17 @@ export async function generateMetadata({
 }
 
 export default async function ArticlesPage({ searchParams }: PageProps) {
-  const configured = isAppwriteConfigured();
   const sp = await searchParams;
+  const q = sp.q?.trim();
+  if (q) {
+    const p = new URLSearchParams();
+    const cat = sp.category?.trim();
+    if (cat) p.set("category", cat);
+    p.set("q", q);
+    redirect(`/search?${p.toString()}`);
+  }
+
+  const configured = isAppwriteConfigured();
   const categorySlug = sp.category?.trim() || undefined;
   const categoryLabel = getCategoryLabelBySlug(categorySlug);
   const invalidSlug = Boolean(categorySlug && !categoryLabel);
@@ -76,6 +87,10 @@ export default async function ArticlesPage({ searchParams }: PageProps) {
             )}
           </p>
         </header>
+
+        <div className="mb-8 max-w-xl">
+          <SiteSearchForm id="articles-archive-search" />
+        </div>
 
         {configured ? (
           <>
