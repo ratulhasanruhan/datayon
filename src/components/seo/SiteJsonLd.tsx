@@ -1,10 +1,13 @@
 import { BRAND } from "@/lib/brand";
-import { SITE_DESCRIPTION, SITE_URL } from "@/lib/seo/site";
-
-const LOGO_PNG = `${SITE_URL}/brand/datayon-profile-logo-2048-light.png`;
+import {
+  SITE_DESCRIPTION,
+  SITE_URL,
+  publisherLogoAbsoluteUrl,
+} from "@/lib/seo/site";
 
 /** Site-wide JSON-LD for search engines (Organization + WebSite). */
 export function SiteJsonLd() {
+  const logoUrl = publisherLogoAbsoluteUrl();
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -16,10 +19,10 @@ export function SiteJsonLd() {
         url: SITE_URL,
         logo: {
           "@type": "ImageObject",
-          url: LOGO_PNG,
-          width: 2048,
-          height: 2048,
-          caption: `${BRAND.name} — lockup`,
+          url: logoUrl,
+          contentUrl: logoUrl,
+          encodingFormat: "image/svg+xml",
+          caption: `${BRAND.name} — mark`,
         },
         sameAs: [BRAND.facebookUrl],
         contactPoint: {

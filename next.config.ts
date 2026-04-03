@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /** Next.js 16+ defaults to Turbopack for `next build`; acknowledge alongside custom `webpack`. */
   turbopack: {},
+  poweredByHeader: false,
   images: {
     remotePatterns: [
       {

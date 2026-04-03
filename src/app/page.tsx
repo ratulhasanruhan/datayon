@@ -218,6 +218,7 @@ export default async function HomePage() {
                         alt={item.title}
                         variant="card"
                         className="aspect-[4/3] sm:aspect-[16/10]"
+                        priority={index < 2}
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-deep/20 to-transparent opacity-0 transition group-hover:opacity-100 dark:from-navy-deep/40" />
                     </div>

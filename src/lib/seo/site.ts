@@ -5,6 +5,13 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://datayon.bd"
 ).replace(/\/$/, "");
 
+/** Committed SVG — use for JSON-LD `logo` / `ImageObject` when 2048px PNGs are not deployed. */
+export const PUBLISHER_LOGO_PATH = "/brand/datayon-mark.svg" as const;
+
+export function publisherLogoAbsoluteUrl(): string {
+  return `${SITE_URL}${PUBLISHER_LOGO_PATH}`;
+}
+
 export const SITE_DESCRIPTION =
   "বাংলায় প্রযুক্তি, স্টার্টআপ, AI, ডেটা, নীতি ও সংস্কৃতি — ডেটায়ন মাসিক ম্যাগাজিন ও অনলাইন আর্টিকেল।";
 

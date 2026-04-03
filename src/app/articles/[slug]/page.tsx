@@ -12,7 +12,7 @@ import { isAppwriteConfigured } from "@/lib/appwrite/config";
 import { BRAND } from "@/lib/brand";
 import { buildPageMetadata, DEFAULT_OG_IMAGE_PATH } from "@/lib/seo/page-metadata";
 import { formatBnDateLong } from "@/lib/locale/bn-date";
-import { SEO_KEYWORDS, SITE_URL } from "@/lib/seo/site";
+import { SEO_KEYWORDS, SITE_URL, publisherLogoAbsoluteUrl } from "@/lib/seo/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -109,6 +109,7 @@ export default async function ArticlePage({ params }: Props) {
   const pageUrl = `${SITE_URL}/articles/${slug}`;
   const coverUrl = getArticleCoverUrl(article.coverFileId);
   const orgId = `${SITE_URL}/#organization`;
+  const publisherLogoUrl = publisherLogoAbsoluteUrl();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -135,9 +136,9 @@ export default async function ArticlePage({ params }: Props) {
       name: BRAND.name,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/brand/datayon-profile-logo-2048-light.png`,
-        width: 2048,
-        height: 2048,
+        url: publisherLogoUrl,
+        contentUrl: publisherLogoUrl,
+        encodingFormat: "image/svg+xml",
       },
     },
     ...(coverUrl
