@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
+import { isAppwriteConfigured } from "@/lib/appwrite/config";
+import { getArticles } from "@/lib/appwrite/queries";
 import { SITE_URL } from "@/lib/seo/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const root = SITE_URL.replace(/\/$/, "");
   const lastModified = new Date();
 
-  return [
+  const staticEntries: MetadataRoute.Sitemap = [
     { url: root, lastModified, changeFrequency: "weekly", priority: 1 },
     {
       url: `${root}/magazine`,
@@ -25,4 +27,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${root}/privacy`, lastModified, changeFrequency: "yearly", priority: 0.35 },
     { url: `${root}/copyright`, lastModified, changeFrequency: "yearly", priority: 0.35 },
   ];
+
+  if (!isAppwriteConfigured()) {
+    return staticEntries;
+  }
+
+  const articles = await getArticles(500);
+  const articleEntries: MetadataRoute.Sitemap = articles.map((a) => ({
+    url: `${root}/articles/${a.slug}`,
+    lastModified: a.publishedAt ? new Date(a.publishedAt) : lastModified,
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+  return [...staticEntries, ...articleEntries];
 }
