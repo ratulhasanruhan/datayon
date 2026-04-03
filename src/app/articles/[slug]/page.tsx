@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArticleBody } from "@/components/articles/ArticleBody";
 import { ArticleCover } from "@/components/articles/ArticleCover";
 import { Container } from "@/components/layout/Container";
 import { SectionLabel } from "@/components/layout/SectionLabel";
@@ -10,6 +11,7 @@ import { getArticleBySlug } from "@/lib/appwrite/queries";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
 import { BRAND } from "@/lib/brand";
 import { buildPageMetadata, DEFAULT_OG_IMAGE_PATH } from "@/lib/seo/page-metadata";
+import { formatBnDateLong } from "@/lib/locale/bn-date";
 import { SEO_KEYWORDS, SITE_URL } from "@/lib/seo/site";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -72,7 +74,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: canonical,
       siteName: BRAND.nameLatin,
       publishedTime: article.publishedAt || undefined,
-      modifiedTime: article.publishedAt || undefined,
+      modifiedTime: article.updatedAt || article.publishedAt || undefined,
       images: ogImages,
     },
     twitter: {
@@ -114,7 +116,7 @@ export default async function ArticlePage({ params }: Props) {
     headline: article.title,
     description: article.excerpt,
     datePublished: article.publishedAt || undefined,
-    dateModified: article.publishedAt || undefined,
+    dateModified: article.updatedAt || article.publishedAt || undefined,
     inLanguage: "bn-BD",
     articleSection: article.category,
     url: pageUrl,
@@ -181,13 +183,14 @@ export default async function ArticlePage({ params }: Props) {
           </h1>
           <p className="mt-4 flex flex-wrap gap-x-3 gap-y-1 font-sans text-xs text-warm">
             <span>{article.readTime}</span>
-            {article.publishedAt ? (
+            {article.updatedAt || article.publishedAt ? (
               <>
                 <span className="text-border" aria-hidden>
                   ·
                 </span>
-                <time dateTime={article.publishedAt}>
-                  {new Date(article.publishedAt).toLocaleDateString("bn-BD")}
+                <time dateTime={article.updatedAt || article.publishedAt}>
+                  হালনাগাদ:{" "}
+                  {formatBnDateLong(article.updatedAt || article.publishedAt)}
                 </time>
               </>
             ) : null}
@@ -199,13 +202,7 @@ export default async function ArticlePage({ params }: Props) {
             </p>
           ) : null}
 
-          {article.content ? (
-            <div className="prose-bn mt-12 text-ink/95">
-              {article.content.split("\n").map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-            </div>
-          ) : null}
+          {article.content ? <ArticleBody content={article.content} /> : null}
 
           <p className="mt-14 border-t border-border/80 pt-8">
             <Link

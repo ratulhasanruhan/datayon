@@ -197,17 +197,14 @@ export default async function SearchPage({ searchParams }: PageProps) {
                 </p>
               ) : (
                 <ul className="mt-6 flex flex-col gap-2.5 sm:gap-3">
-                  {articles.map((a, i) => (
+                  {articles.map((a) => (
                     <li key={a.id}>
                       <Link
                         href={`/articles/${a.slug}`}
                         className="group flex min-h-[5.5rem] flex-row items-stretch gap-3 overflow-hidden rounded-xl border border-border/70 bg-surface-elevated/50 p-3 transition hover:border-teal/40 hover:bg-art/40 dark:border-navy2 dark:bg-navy-mid/20 dark:hover:bg-navy-mid/35 sm:min-h-0 sm:gap-6 sm:p-2"
                       >
                         <div className="flex min-h-0 min-w-0 flex-1 flex-col justify-center py-0.5 pl-0.5 sm:px-4 sm:py-4">
-                          <span className="font-mono text-[10px] text-warm/70 sm:text-xs">
-                            {(i + 1).toString().padStart(2, "0")}
-                          </span>
-                          <p className="mt-1 font-sans text-[9px] font-semibold tracking-widest text-teal sm:mt-2 sm:text-[10px]">
+                          <p className="font-sans text-[9px] font-semibold tracking-widest text-teal sm:text-[10px]">
                             {a.category}
                           </p>
                           <p className="mt-1 font-article text-[16px] font-normal leading-snug text-ink group-hover:text-teal sm:text-2xl sm:leading-tight">

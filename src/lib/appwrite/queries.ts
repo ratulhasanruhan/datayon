@@ -10,6 +10,9 @@ import { mapArticleDoc, mapIssueDoc } from "@/lib/appwrite/mappers";
 import type { Article, MagazineIssue } from "@/types/content";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
 
+/** List order: last modified (Appwrite system attribute). */
+const ARTICLE_ORDER_DESC = Query.orderDesc("$updatedAt");
+
 async function safeList<T>(
   fn: () => Promise<T>,
   fallback: T
@@ -54,11 +57,7 @@ function articleListQueries(
   if (search) {
     filters.push(search);
   }
-  return [
-    ...filters,
-    Query.orderDesc("published_at"),
-    Query.limit(limit),
-  ];
+  return [...filters, ARTICLE_ORDER_DESC, Query.limit(limit)];
 }
 
 export async function getArticles(
@@ -85,14 +84,10 @@ export async function getFeaturedArticles(
       ? [
           Query.equal("featured", true),
           categoryClause(options.category),
-          Query.orderDesc("published_at"),
+          ARTICLE_ORDER_DESC,
           Query.limit(limit),
         ]
-      : [
-          Query.equal("featured", true),
-          Query.orderDesc("published_at"),
-          Query.limit(limit),
-        ];
+      : [Query.equal("featured", true), ARTICLE_ORDER_DESC, Query.limit(limit)];
     const res = await db.listDocuments(
       APPWRITE_DATABASE_ID,
       COLLECTION_ARTICLES,
@@ -105,12 +100,8 @@ export async function getFeaturedArticles(
       APPWRITE_DATABASE_ID,
       COLLECTION_ARTICLES,
       options?.category
-        ? [
-            categoryClause(options.category),
-            Query.orderDesc("published_at"),
-            Query.limit(limit),
-          ]
-        : [Query.orderDesc("published_at"), Query.limit(limit)]
+        ? [categoryClause(options.category), ARTICLE_ORDER_DESC, Query.limit(limit)]
+        : [ARTICLE_ORDER_DESC, Query.limit(limit)]
     );
     return fallback.documents.map(mapArticleDoc);
   }, []);

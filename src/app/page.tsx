@@ -12,6 +12,7 @@ import { SiteSearchForm } from "@/components/search/SiteSearchForm";
 import { SectionLabel } from "@/components/layout/SectionLabel";
 import { getArticles, getIssues } from "@/lib/appwrite/queries";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
+import { formatBnDateLong } from "@/lib/locale/bn-date";
 import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import { SITE_DESCRIPTION, SITE_DESCRIPTION_EN } from "@/lib/seo/site";
 
@@ -196,13 +197,13 @@ export default async function HomePage() {
             </div>
           ) : (
             <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-5">
-              {articles.map((item, i) => (
+              {articles.map((item, index) => (
                 <li
                   key={item.id}
                   className={cn(
                     "min-w-0",
                     /* Below lg: four cards; lg+: six cards (3×2) */
-                    i >= 4 && "hidden lg:block"
+                    index >= 4 && "hidden lg:block"
                   )}
                 >
                   <article
@@ -222,10 +223,19 @@ export default async function HomePage() {
                     </div>
                     <div className="flex flex-1 flex-col p-3 sm:p-5">
                       <div className="flex items-start justify-between gap-2">
-                        <span className="font-mono text-[8px] tabular-nums text-warm/70 sm:text-[10px]">
-                          {(i + 1).toString().padStart(2, "0")}
-                        </span>
-                        <span className="line-clamp-1 rounded-full bg-teal/10 px-2 py-0.5 text-center font-sans text-[8px] font-semibold uppercase tracking-wide text-teal dark:bg-teal/15 sm:text-[10px]">
+                        {(item.updatedAt || item.publishedAt) ? (
+                          <time
+                            dateTime={item.updatedAt || item.publishedAt}
+                            className="line-clamp-2 min-w-0 flex-1 text-left font-sans text-[8px] leading-snug text-warm/90 sm:text-[10px]"
+                          >
+                            {formatBnDateLong(
+                              item.updatedAt || item.publishedAt
+                            )}
+                          </time>
+                        ) : (
+                          <span className="min-w-0 flex-1" aria-hidden />
+                        )}
+                        <span className="line-clamp-1 shrink-0 rounded-full bg-teal/10 px-2 py-0.5 text-center font-sans text-[8px] font-semibold uppercase tracking-wide text-teal dark:bg-teal/15 sm:text-[10px]">
                           {item.category}
                         </span>
                       </div>

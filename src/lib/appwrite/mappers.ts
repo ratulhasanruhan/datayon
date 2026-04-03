@@ -14,6 +14,7 @@ export function mapArticleDoc(doc: Models.Document): Article {
     category: String(d.category ?? ""),
     readTime: String(d.read_time ?? ""),
     publishedAt: String(d.published_at ?? ""),
+    updatedAt: String(d.$updatedAt ?? ""),
     featured: Boolean(d.featured),
     content: d.content != null ? String(d.content) : undefined,
     coverFileId:

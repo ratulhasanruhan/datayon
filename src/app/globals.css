@@ -63,8 +63,11 @@
 }
 
 html {
-  scroll-behavior: smooth;
   color-scheme: light;
+}
+
+html[data-scroll-behavior="smooth"] {
+  scroll-behavior: smooth;
 }
 
 html.dark {
@@ -139,6 +142,115 @@ body {
 
 .prose-bn p {
   margin-bottom: 1.25rem;
+}
+
+/* MD / HTML article body — same column, editorial rhythm */
+.prose-bn.article-body-rich :where(h2, h3, h4) {
+  font-family: var(--font-display), var(--font-article), serif;
+  font-weight: 700;
+  color: var(--color-ink);
+  line-height: 1.35;
+}
+
+.prose-bn.article-body-rich h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+}
+
+.prose-bn.article-body-rich h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.prose-bn.article-body-rich h4 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.4rem;
+  font-size: 1.1rem;
+}
+
+.prose-bn.article-body-rich :where(ul, ol) {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose-bn.article-body-rich li {
+  margin-bottom: 0.35rem;
+}
+
+.prose-bn.article-body-rich a {
+  color: var(--color-teal);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-bn.article-body-rich a:hover {
+  color: var(--color-teal-dark);
+}
+
+.prose-bn.article-body-rich blockquote {
+  margin: 1.25rem 0;
+  border-left: 3px solid var(--color-teal);
+  padding-left: 1rem;
+  color: var(--color-muted);
+}
+
+.prose-bn.article-body-rich hr {
+  margin: 1.75rem 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.prose-bn.article-body-rich pre {
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-art);
+  font-size: 0.88em;
+  line-height: 1.5;
+}
+
+.prose-bn.article-body-rich code {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.9em;
+}
+
+.prose-bn.article-body-rich pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.prose-bn.article-body-rich :not(pre) > code {
+  background: var(--color-art);
+  padding: 0.12em 0.35em;
+  border-radius: 0.25rem;
+}
+
+.prose-bn.article-body-rich img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.prose-bn.article-body-rich table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.95em;
+}
+
+.prose-bn.article-body-rich th,
+.prose-bn.article-body-rich td {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+}
+
+.prose-bn.article-body-rich th {
+  background: var(--color-art);
+  font-weight: 600;
 }
 
 /* Subtle noise overlay (CSS-only) */

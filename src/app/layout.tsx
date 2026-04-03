@@ -151,6 +151,7 @@ export default function RootLayout({
   return (
     <html
       lang="bn"
+      data-scroll-behavior="smooth"
       className={`${hindSiliguri.variable} ${tiroBangla.variable} ${dmSans.variable} ${notoSerifBengali.variable} ${notoSansBengali.variable} h-full`}
       suppressHydrationWarning
     >
