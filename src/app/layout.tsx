@@ -12,6 +12,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { BRAND } from "@/lib/brand";
+import { DEFAULT_OG_IMAGE_PATH } from "@/lib/seo/page-metadata";
 import { SEO_KEYWORDS, SITE_DESCRIPTION, SITE_DESCRIPTION_EN, SITE_URL } from "@/lib/seo/site";
 
 /* Brand: Hind Siliguri = logo/wordmark (Branding/datayon_facebook_profile_logo*.html). */
@@ -88,14 +89,7 @@ export const metadata: Metadata = {
     emails: ["editor@datayon.bd"],
     images: [
       {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: `${BRAND.name} — ${BRAND.tagline}`,
-        type: "image/png",
-      },
-      {
-        url: "/facebook-image",
+        url: DEFAULT_OG_IMAGE_PATH,
         width: 1200,
         height: 630,
         alt: `${BRAND.name} — ${BRAND.tagline}`,
@@ -109,7 +103,7 @@ export const metadata: Metadata = {
     creator: "@datayon",
     title: `${BRAND.name} — ${BRAND.tagline}`,
     description: SITE_DESCRIPTION_EN,
-    images: ["/twitter-image"],
+    images: [DEFAULT_OG_IMAGE_PATH],
   },
   alternates: {
     canonical: "/",

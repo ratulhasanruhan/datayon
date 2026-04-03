@@ -4,11 +4,14 @@ import { absoluteUrl, SEO_KEYWORDS, SITE_DESCRIPTION_EN } from "@/lib/seo/site";
 
 export const OG_SIZE = { width: 1200, height: 630, type: "image/png" as const };
 
-/** Default OG + Facebook share image (`/opengraph-image`); same asset as `/facebook-image`. */
+/** Static brand card — `public/brand/og_image.png` */
+export const DEFAULT_OG_IMAGE_PATH = "/brand/og_image.png" as const;
+
+/** Default OG + Facebook / Twitter share image */
 export function defaultOgImages(alt: string): NonNullable<Metadata["openGraph"]>["images"] {
   return [
     {
-      url: "/opengraph-image",
+      url: DEFAULT_OG_IMAGE_PATH,
       width: OG_SIZE.width,
       height: OG_SIZE.height,
       alt,
@@ -52,7 +55,7 @@ export function buildPageMetadata(opts: BuildPageMetadataOptions): Metadata {
   const ogDescription = opts.openGraphDescription ?? opts.description;
   const alt = `${ogTitle} · ${BRAND.name}`;
   const images = opts.images ?? defaultOgImages(alt);
-  const twUrl = twitterImageUrlFromOg(images) ?? "/twitter-image";
+  const twUrl = twitterImageUrlFromOg(images) ?? DEFAULT_OG_IMAGE_PATH;
 
   const titleField: Metadata["title"] = opts.absoluteTitle
     ? { absolute: opts.title }

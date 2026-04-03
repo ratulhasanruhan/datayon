@@ -9,7 +9,7 @@ import { getArticleCoverUrl } from "@/lib/appwrite/covers";
 import { getArticleBySlug } from "@/lib/appwrite/queries";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
 import { BRAND } from "@/lib/brand";
-import { buildPageMetadata } from "@/lib/seo/page-metadata";
+import { buildPageMetadata, DEFAULT_OG_IMAGE_PATH } from "@/lib/seo/page-metadata";
 import { SEO_KEYWORDS, SITE_URL } from "@/lib/seo/site";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ]
     : [
         {
-          url: `${base}/opengraph-image`,
+          url: `${base}${DEFAULT_OG_IMAGE_PATH}`,
           width: 1200,
           height: 630,
           alt: article.title,
@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: article.title,
       description: article.excerpt,
-      images: cover ? [cover] : [`${base}/twitter-image`],
+      images: cover ? [cover] : [`${base}${DEFAULT_OG_IMAGE_PATH}`],
     },
   };
 }
