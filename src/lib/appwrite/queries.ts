@@ -21,31 +21,53 @@ async function safeList<T>(
   }
 }
 
-export async function getArticles(limit = 24): Promise<Article[]> {
+type ArticleListOptions = {
+  /** Exact `category` field value in Appwrite (Bengali label) */
+  category?: string;
+};
+
+export async function getArticles(
+  limit = 24,
+  options?: ArticleListOptions
+): Promise<Article[]> {
   if (!isAppwriteConfigured()) return [];
   return safeList(async () => {
     const db = getDatabases();
-    const res = await db.listDocuments(
-      APPWRITE_DATABASE_ID,
-      COLLECTION_ARTICLES,
-      [Query.orderDesc("published_at"), Query.limit(limit)]
-    );
+    const q = options?.category
+      ? [
+          Query.equal("category", options.category),
+          Query.orderDesc("published_at"),
+          Query.limit(limit),
+        ]
+      : [Query.orderDesc("published_at"), Query.limit(limit)];
+    const res = await db.listDocuments(APPWRITE_DATABASE_ID, COLLECTION_ARTICLES, q);
     return res.documents.map(mapArticleDoc);
   }, []);
 }
 
-export async function getFeaturedArticles(limit = 3): Promise<Article[]> {
+export async function getFeaturedArticles(
+  limit = 3,
+  options?: ArticleListOptions
+): Promise<Article[]> {
   if (!isAppwriteConfigured()) return [];
   return safeList(async () => {
     const db = getDatabases();
+    const featuredQueries = options?.category
+      ? [
+          Query.equal("featured", true),
+          Query.equal("category", options.category),
+          Query.orderDesc("published_at"),
+          Query.limit(limit),
+        ]
+      : [
+          Query.equal("featured", true),
+          Query.orderDesc("published_at"),
+          Query.limit(limit),
+        ];
     const res = await db.listDocuments(
       APPWRITE_DATABASE_ID,
       COLLECTION_ARTICLES,
-      [
-        Query.equal("featured", true),
-        Query.orderDesc("published_at"),
-        Query.limit(limit),
-      ]
+      featuredQueries
     );
     if (res.documents.length > 0) {
       return res.documents.map(mapArticleDoc);
@@ -53,7 +75,13 @@ export async function getFeaturedArticles(limit = 3): Promise<Article[]> {
     const fallback = await db.listDocuments(
       APPWRITE_DATABASE_ID,
       COLLECTION_ARTICLES,
-      [Query.orderDesc("published_at"), Query.limit(limit)]
+      options?.category
+        ? [
+            Query.equal("category", options.category),
+            Query.orderDesc("published_at"),
+            Query.limit(limit),
+          ]
+        : [Query.orderDesc("published_at"), Query.limit(limit)]
     );
     return fallback.documents.map(mapArticleDoc);
   }, []);

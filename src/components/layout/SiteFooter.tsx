@@ -48,7 +48,7 @@ export function SiteFooter() {
                     href="/articles"
                     className="text-ink/80 transition hover:text-teal dark:text-cream/80 dark:hover:text-teal"
                   >
-                    সর্বশেষ প্রবন্ধ
+                    সর্বশেষ আর্টিকেল
                   </Link>
                 </li>
                 <li>
@@ -57,6 +57,14 @@ export function SiteFooter() {
                     className="text-ink/80 transition hover:text-teal dark:text-cream/80 dark:hover:text-teal"
                   >
                     সম্পাদকীয়
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/media-kit"
+                    className="text-ink/80 transition hover:text-teal dark:text-cream/80 dark:hover:text-teal"
+                  >
+                    মিডিয়া কিট
                   </Link>
                 </li>
                 <li>

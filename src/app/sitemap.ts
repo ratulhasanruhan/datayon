@@ -1,9 +1,8 @@
 import type { MetadataRoute } from "next";
-
-const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://datayon.bd";
+import { SITE_URL } from "@/lib/seo/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const root = base.replace(/\/$/, "");
+  const root = SITE_URL.replace(/\/$/, "");
   const lastModified = new Date();
 
   return [
@@ -22,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { url: `${root}/articles`, lastModified, changeFrequency: "daily", priority: 0.9 },
     { url: `${root}/about`, lastModified, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${root}/media-kit`, lastModified, changeFrequency: "monthly", priority: 0.48 },
     { url: `${root}/privacy`, lastModified, changeFrequency: "yearly", priority: 0.35 },
     { url: `${root}/copyright`, lastModified, changeFrequency: "yearly", priority: 0.35 },
   ];

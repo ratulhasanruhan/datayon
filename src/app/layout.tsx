@@ -7,10 +7,12 @@ import {
   Tiro_Bangla,
 } from "next/font/google";
 import "./globals.css";
+import { SiteJsonLd } from "@/components/seo/SiteJsonLd";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { BRAND } from "@/lib/brand";
+import { SEO_KEYWORDS, SITE_DESCRIPTION, SITE_DESCRIPTION_EN, SITE_URL } from "@/lib/seo/site";
 
 /* Brand: Hind Siliguri = logo/wordmark (Branding/datayon_facebook_profile_logo*.html). */
 const hindSiliguri = Hind_Siliguri({
@@ -49,42 +51,90 @@ const tiroBangla = Tiro_Bangla({
   display: "swap",
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://datayon.bd";
+const siteVerification =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim() || undefined;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
+  applicationName: BRAND.nameLatin,
+  ...(siteVerification
+    ? { verification: { google: siteVerification } }
+    : {}),
   title: {
     default: `${BRAND.name} — ${BRAND.tagline}`,
     template: `%s · ${BRAND.name}`,
   },
-  description:
-    "বাংলায় প্রযুক্তি, স্টার্টআপ, নীতি ও সংস্কৃতি — ডেটায়ন ম্যাগাজিন।",
-  keywords: [
-    "ডেটায়ন",
-    "বাংলা প্রযুক্তি",
-    "টেক ম্যাগাজিন",
-    "Bangladesh tech",
-    "Datayon",
-  ],
+  description: SITE_DESCRIPTION,
+  keywords: [...SEO_KEYWORDS],
+  authors: [{ name: BRAND.name, url: SITE_URL }],
+  creator: BRAND.name,
+  publisher: BRAND.name,
+  category: "technology",
+  classification: "Magazine",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     type: "website",
     locale: "bn_BD",
+    alternateLocale: ["en_US"],
+    url: SITE_URL,
     siteName: BRAND.nameLatin,
     title: `${BRAND.name} — ${BRAND.tagline}`,
-    description:
-      "বাংলায় প্রযুক্তি, স্টার্টআপ, নীতি ও সংস্কৃতি — ডেটায়ন ম্যাগাজিন।",
+    description: SITE_DESCRIPTION,
+    countryName: "Bangladesh",
+    emails: ["editor@datayon.bd"],
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${BRAND.name} — ${BRAND.tagline}`,
+        type: "image/png",
+      },
+      {
+        url: "/facebook-image",
+        width: 1200,
+        height: 630,
+        alt: `${BRAND.name} — ${BRAND.tagline}`,
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@datayon",
+    creator: "@datayon",
     title: `${BRAND.name} — ${BRAND.tagline}`,
+    description: SITE_DESCRIPTION_EN,
+    images: ["/twitter-image"],
   },
   alternates: {
     canonical: "/",
+    languages: {
+      "bn-BD": "/",
+      "x-default": "/",
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   icons: {
     icon: "/brand/datayon-mark.svg",
     apple: "/brand/datayon-mark.svg",
+  },
+  other: {
+    "msapplication-TileColor": "#0d1b2a",
   },
 };
 
@@ -95,6 +145,7 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({
@@ -109,6 +160,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-paper text-ink antialiased">
+        <SiteJsonLd />
         <ThemeProvider>
           <a
             href="#main"

@@ -56,7 +56,7 @@
   --font-sans: var(--font-dm), ui-sans-serif, system-ui, sans-serif;
   /** Logo + wordmark — matches Branding Facebook lockups */
   --font-brand: var(--font-hind), "Hind Siliguri", system-ui, sans-serif;
-  /** Prose / প্রবন্ধ — Tiro Bangla (Bangla literary serif, long-form) */
+  /** Prose / আর্টিকেল — Tiro Bangla (Bangla literary serif, long-form) */
   --font-article: var(--font-tiro-bn), "Tiro Bangla", serif;
   --font-display: var(--font-noto-serif-bn), "Noto Serif Bengali", serif;
   --font-body: var(--font-noto-bn), "Noto Sans Bengali", sans-serif;

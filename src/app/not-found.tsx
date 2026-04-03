@@ -25,7 +25,7 @@ export default function NotFound() {
             মূল পাতায় ফিরুন
           </Button>
           <Button href="/articles" variant="ghost">
-            প্রবন্ধ
+            আর্টিকেল
           </Button>
         </div>
         <p className="mt-8">

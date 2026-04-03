@@ -5,12 +5,13 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
 import { LogoLockup } from "@/components/brand/LogoLockup";
+import { SubscribeModal } from "@/components/subscribe/SubscribeModal";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const nav = [
   { href: "/", label: "প্রচ্ছদ" },
   { href: "/magazine", label: "মাসিক" },
-  { href: "/articles", label: "প্রবন্ধ" },
+  { href: "/articles", label: "আর্টিকেল" },
   { href: "/about", label: "সম্পর্কে" },
 ];
 
@@ -75,9 +76,11 @@ function MobileNavLink({
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-paper/90 shadow-[0_1px_0_rgba(13,27,42,0.04)] backdrop-blur-md dark:shadow-[0_1px_0_rgba(0,0,0,0.25)]">
+      <SubscribeModal open={subscribeOpen} onClose={() => setSubscribeOpen(false)} />
       <div className="mx-auto flex h-[56px] max-w-[1200px] items-center justify-between gap-2 px-4 sm:h-[60px] sm:px-6 lg:px-8">
         <Link
           href="/"
@@ -98,12 +101,13 @@ export function SiteHeader() {
                 {item.label}
               </DesktopNavLink>
             ))}
-            <Link
-              href="/articles"
+            <button
+              type="button"
               className="ml-1 rounded-full bg-navy px-3.5 py-2 font-sans text-[10px] font-semibold text-cream shadow-sm transition hover:bg-navy2 dark:bg-teal dark:text-navy dark:hover:bg-teal-dark lg:text-[11px]"
+              onClick={() => setSubscribeOpen(true)}
             >
               সাবস্ক্রাইব
-            </Link>
+            </button>
           </nav>
 
           <ThemeToggle className="sm:hidden" />
@@ -160,13 +164,16 @@ export function SiteHeader() {
               {item.label}
             </MobileNavLink>
           ))}
-          <Link
-            href="/articles"
-            className="mx-0 mt-2 rounded-full bg-navy py-3 text-center font-sans text-sm font-semibold text-cream"
-            onClick={() => setOpen(false)}
+          <button
+            type="button"
+            className="mx-0 mt-2 w-full rounded-full bg-navy py-3 text-center font-sans text-sm font-semibold text-cream"
+            onClick={() => {
+              setOpen(false);
+              setSubscribeOpen(true);
+            }}
           >
             সাবস্ক্রাইব
-          </Link>
+          </button>
         </nav>
       </div>
     </header>

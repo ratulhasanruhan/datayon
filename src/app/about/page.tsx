@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 import { Container } from "@/components/layout/Container";
 import { SectionLabel } from "@/components/layout/SectionLabel";
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "সম্পর্কে",
-  description: `${BRAND.name} — ${BRAND.tagline}`,
-};
+  description: `${BRAND.name} — সম্পাদকীয়, মিশন ও প্রকাশনা। ${BRAND.tagline}`,
+  path: "/about",
+  descriptionEn: `About ${BRAND.nameLatin} — Bangla tech magazine, mission and editorial.`,
+});
 
 export default function AboutPage() {
   return (
@@ -46,6 +49,16 @@ export default function AboutPage() {
               className="font-mono text-teal underline-offset-4 hover:underline"
             >
               {BRAND.editorEmail}
+            </a>
+            <br />
+            ফেসবুক:{" "}
+            <a
+              href={BRAND.facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-teal underline-offset-4 hover:underline"
+            >
+              facebook.com/datayonbd
             </a>
             <br />
             ওয়েবসাইট:{" "}

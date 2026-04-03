@@ -20,6 +20,7 @@ const apiKey = process.env.APPWRITE_API_KEY;
 const DB = "main";
 const ART = "articles";
 const ISS = "issues";
+const SUB = "subscribers";
 const BUCKET = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_COVERS ?? "article-covers";
 const BUCKET_MAGAZINE =
   process.env.NEXT_PUBLIC_APPWRITE_BUCKET_MAGAZINE ?? "magazine-assets";
@@ -80,6 +81,23 @@ async function main() {
   } catch (e) {
     if (String(e.code) === "409") {
       console.log("Collection exists:", ISS);
+    } else {
+      throw e;
+    }
+  }
+
+  try {
+    await databases.createCollection({
+      databaseId: DB,
+      collectionId: SUB,
+      name: "Subscribers",
+      permissions: [],
+      documentSecurity: false,
+    });
+    console.log("Created collection:", SUB);
+  } catch (e) {
+    if (String(e.code) === "409") {
+      console.log("Collection exists:", SUB);
     } else {
       throw e;
     }
@@ -234,6 +252,38 @@ async function main() {
     }
   }
 
+  const subAttrFns = [
+    () =>
+      databases.createStringAttribute({
+        databaseId: DB,
+        collectionId: SUB,
+        key: "name",
+        size: 256,
+        required: true,
+      }),
+    () =>
+      databases.createStringAttribute({
+        databaseId: DB,
+        collectionId: SUB,
+        key: "email",
+        size: 320,
+        required: true,
+      }),
+  ];
+
+  for (const fn of subAttrFns) {
+    try {
+      await fn();
+      await sleep(2500);
+    } catch (e) {
+      if (String(e.code) === "409") {
+        /* attribute exists */
+      } else {
+        console.warn("Subscriber attribute note:", e.message ?? e);
+      }
+    }
+  }
+
   console.log("Waiting for attributes to become available...");
   await sleep(5000);
 
@@ -300,7 +350,7 @@ async function main() {
       month_label: "এপ্রিল ২০২৬",
       headline: "বাংলাদেশের ডেটা অর্থনীতি — কতটা প্রস্তুত আমরা?",
       excerpt:
-        "তথ্য প্রযুক্তির নতুন যুগে বাংলাদেশ কোথায় দাঁড়িয়ে — প্রচ্ছদ প্রবন্ধ ও নির্বাচিত বিশ্লেষণ।",
+        "তথ্য প্রযুক্তির নতুন যুগে বাংলাদেশ কোথায় দাঁড়িয়ে — প্রচ্ছদ আর্টিকেল ও নির্বাচিত বিশ্লেষণ।",
       cover_line: "ডেটা সেন্টার থেকে স্টার্টআপ — একটি বিস্তৃত চিত্র।",
       sort_order: 1,
     },
@@ -331,7 +381,7 @@ async function main() {
       published_at: now,
       featured: true,
       content:
-        "এটি একটি নমুনা প্রবন্ধ। বাংলাদেশের প্রেক্ষাপটে AI এজেন্ট ও নীতির দিকগুলো এখানে বিস্তারিত যুক্ত করা যাবে।",
+        "এটি একটি নমুনা আর্টিকেল। বাংলাদেশের প্রেক্ষাপটে AI এজেন্ট ও নীতির দিকগুলো এখানে বিস্তারিত যুক্ত করা যাবে।",
     },
     {
       title: "ঢাকার টেক ইকোসিস্টেম ২০২৬",

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/cn";
@@ -9,8 +10,18 @@ import { HomeMagazineIssues } from "@/components/home/HomeMagazineIssues";
 import { SectionLabel } from "@/components/layout/SectionLabel";
 import { getFeaturedArticles, getIssues } from "@/lib/appwrite/queries";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
+import { SITE_DESCRIPTION, SITE_DESCRIPTION_EN } from "@/lib/seo/site";
 
 export const revalidate = 120;
+
+export const metadata: Metadata = buildPageMetadata({
+  title: `${BRAND.name} — ${BRAND.tagline}`,
+  absoluteTitle: true,
+  description: SITE_DESCRIPTION,
+  path: "/",
+  descriptionEn: SITE_DESCRIPTION_EN,
+});
 
 export default async function HomePage() {
   const configured = isAppwriteConfigured();
@@ -26,44 +37,54 @@ export default async function HomePage() {
         aria-labelledby="intro-heading"
       >
         <div
-          className="pointer-events-none absolute -left-20 top-4 opacity-[0.12] dark:opacity-[0.08]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_60%_at_100%_-20%,rgba(58,143,163,0.14),transparent_55%)] dark:bg-[radial-gradient(ellipse_85%_55%_at_100%_0%,rgba(58,143,163,0.12),transparent_50%)]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -right-16 top-1/2 h-[min(420px,55vw)] w-[min(420px,55vw)] -translate-y-1/2 rounded-full bg-teal/[0.06] blur-3xl dark:bg-teal/[0.08] sm:-right-10 md:right-[8%]"
+          aria-hidden
+        />
+        {/* Watermark */}
+        <div
+          className="pointer-events-none absolute -left-8 top-2 opacity-[0.07] dark:opacity-[0.05] sm:-left-16 sm:top-4 sm:opacity-[0.1] md:-left-20"
           aria-hidden
         >
-          <LogoMark size={260} variant="on-light" />
+          <LogoMark size={200} variant="on-light" />
         </div>
 
-        <Container className="relative py-14 sm:py-16 lg:py-20">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-            <div>
+        <Container className="relative py-10 sm:py-14 lg:py-20">
+          <div className="grid items-center gap-8 sm:gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+            <div className="min-w-0">
               <SectionLabel>{BRAND.name} · ম্যাগাজিন</SectionLabel>
               <h1
                 id="intro-heading"
-                className="mt-5 max-w-xl font-brand text-3xl font-bold leading-[1.2] tracking-tight text-ink sm:text-4xl md:text-[2.65rem]"
+                className="mt-4 max-w-xl font-brand text-[1.65rem] font-bold leading-[1.18] tracking-tight text-ink sm:mt-5 sm:text-4xl sm:leading-[1.2] md:text-[2.65rem]"
               >
                 {BRAND.tagline}
               </h1>
-              <p className="mt-5 max-w-lg font-body text-base leading-relaxed text-muted sm:text-lg">
+              <p className="mt-4 max-w-lg font-body text-[15px] leading-relaxed text-muted sm:mt-5 sm:text-lg">
                 প্রতি মাসে একটি সমৃদ্ধ সংখ্যা, সঙ্গে নিয়মিত অনলাইন বিশ্লেষণ ও খবর — বাংলায়
                 প্রযুক্তির গল্প, পরিষ্কার ভাষায়।
               </p>
-              <div className="mt-10 flex flex-wrap items-center gap-3">
-                <Button href="/magazine" variant="primary">
+              <div className="mt-8 flex w-full max-w-md flex-col gap-2.5 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+                <Button href="/magazine" variant="primary" className="w-full justify-center sm:w-auto">
                   মাসিক সংখ্যা
                 </Button>
-                <Button href="/articles" variant="ghost">
-                  সব প্রবন্ধ
+                <Button href="/articles" variant="ghost" className="w-full justify-center sm:w-auto">
+                  সব আর্টিকেল
                 </Button>
               </div>
             </div>
 
+            {/* Mobile: compact horizontal strip; lg+: square card */}
             <div className="relative flex justify-center lg:justify-end">
-              <div className="relative aspect-square w-full max-w-[320px] rounded-2xl border border-border/50 bg-surface-elevated/80 p-8 shadow-inner dark:border-navy2 dark:bg-navy-mid/40">
-                <div className="flex h-full flex-col items-center justify-center gap-5">
-                  <LogoMark size={112} variant="on-light" />
-                  <p className="text-center font-brand text-lg font-semibold text-ink dark:text-cream">
+              <div className="flex w-full max-w-md flex-row items-center gap-4 rounded-2xl border border-border/60 bg-surface-elevated/95 px-4 py-4 shadow-[0_12px_40px_-12px_rgba(13,27,42,0.18)] ring-1 ring-teal/10 dark:border-navy2/90 dark:bg-navy-mid/50 dark:ring-teal/15 dark:shadow-[0_16px_48px_-16px_rgba(0,0,0,0.45)] sm:max-w-lg sm:gap-5 sm:px-6 sm:py-5 lg:aspect-square lg:max-w-[320px] lg:flex-col lg:items-center lg:justify-center lg:gap-5 lg:p-8 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                <LogoMark size={88} variant="on-light" className="shrink-0" />
+                <div className="min-w-0 flex-1 text-left lg:text-center">
+                  <p className="font-brand text-base font-semibold text-ink dark:text-cream sm:text-lg">
                     ডেটায়ন
                   </p>
-                  <p className="text-center font-brand text-sm font-medium leading-snug text-muted">
+                  <p className="mt-1 font-brand text-xs font-medium leading-snug text-muted sm:text-sm">
                     {BRAND.tagline}
                   </p>
                 </div>
@@ -113,7 +134,7 @@ export default async function HomePage() {
                 id="articles-heading"
                 className="mt-4 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl"
               >
-                সর্বশেষ প্রবন্ধ
+                সর্বশেষ আর্টিকেল
               </h2>
               <p className="mt-2 font-body text-sm leading-relaxed text-muted">
                 মাসিকের বাইরেও নিয়মিত আপডেট ও মতামত।
@@ -131,7 +152,7 @@ export default async function HomePage() {
           {articles.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border bg-surface/50 px-6 py-12 text-center dark:bg-navy-mid/20">
               <p className="font-body text-sm text-muted">
-                এখনও কোনো প্রবন্ধ নেই।{" "}
+                এখনও কোনো আর্টিকেল নেই।{" "}
                 <code className="rounded-md bg-art px-2 py-0.5 font-mono text-xs">
                   npm run seed:appwrite
                 </code>{" "}
@@ -189,7 +210,7 @@ export default async function HomePage() {
 
           <div className="mt-10 flex justify-center sm:mt-12">
             <Button href="/articles" variant="ghost">
-              আরও প্রবন্ধ
+              আরও আর্টিকেল
             </Button>
           </div>
         </Container>

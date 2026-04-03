@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 import { Container } from "@/components/layout/Container";
 import { SectionLabel } from "@/components/layout/SectionLabel";
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "কপিরাইট",
-  description: `${BRAND.name} — স্বত্ব ও ব্যবহার সম্পর্কিত নোটিশ।`,
-};
+  description: `${BRAND.name} — স্বত্ব, পুনর্মুদ্রণ ও ব্যবহার সম্পর্কিত নোটিশ।`,
+  path: "/copyright",
+  descriptionEn: "Datayon copyright — rights, reuse and republication.",
+});
 
 export default function CopyrightPage() {
   const year = new Date().getFullYear();

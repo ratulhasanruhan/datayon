@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { BRAND } from "@/lib/brand";
 import { Container } from "@/components/layout/Container";
 import { SectionLabel } from "@/components/layout/SectionLabel";
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "গোপনীয়তা নীতি",
-  description: `${BRAND.name} — ব্যক্তিগত তথ্য ও কুকিজ সম্পর্কিত নীতি।`,
-};
+  description: `${BRAND.name} — ব্যক্তিগত তথ্য, কুকিজ ও ট্র্যাকিং সম্পর্কিত নীতি।`,
+  path: "/privacy",
+  descriptionEn: "Datayon privacy policy — cookies, analytics and personal data.",
+});
 
 export default function PrivacyPage() {
   return (

@@ -7,11 +7,14 @@ import { MagazineIssueArchiveCard } from "@/components/magazine/MagazineIssueArc
 import { groupIssuesByYear } from "@/lib/magazine/issue-links";
 import { getIssues } from "@/lib/appwrite/queries";
 import { isAppwriteConfigured } from "@/lib/appwrite/config";
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "মাসিক সংখ্যা",
   description: `${BRAND.name} — মাসিক ম্যাগাজিনের সংখ্যা ও প্রচ্ছদ। বছরভিত্তিক আর্কাইভ।`,
-};
+  path: "/magazine",
+  descriptionEn: "Datayon magazine issues — monthly covers and year archive.",
+});
 
 export const revalidate = 120;
 

@@ -11,9 +11,6 @@ type Props = {
   priority?: boolean;
 };
 
-const HERO_W = 1200;
-const HERO_H = 675;
-
 /** Cover image from Appwrite Storage, or editorial placeholder matching site palette. */
 export function ArticleCover({
   coverFileId,
@@ -24,9 +21,10 @@ export function ArticleCover({
 }: Props) {
   const src = getArticleCoverUrl(coverFileId ?? undefined);
 
+  /** Thumb: fixed widths only — `w-full` inside `shrink-0` parent collapses to 0 (no visible image). */
   const ratio =
     variant === "thumb"
-      ? "aspect-[4/3] w-[104px] shrink-0 sm:w-full sm:max-w-[176px]"
+      ? "aspect-[4/3] w-[104px] shrink-0 sm:w-[176px]"
       : variant === "card"
         ? "aspect-[16/10] w-full max-sm:aspect-[5/3]"
         : "";
@@ -55,12 +53,16 @@ export function ArticleCover({
     );
   }
 
-  /** Hero: intrinsic dimensions avoid `fill` collapsing inside flex ancestors (desktop). */
+  /**
+   * Hero: fixed aspect box + `fill` so height is never 0 (flex ancestors on desktop
+   * can collapse intrinsic-height images). `min-w-0` + `z-10` avoid overflow/stacking issues.
+   */
   if (variant === "hero") {
     return (
       <div
         className={cn(
-          "relative w-full overflow-hidden border border-border/40 bg-art shadow-sm",
+          "relative z-10 w-full min-w-0 overflow-hidden border border-border/40 bg-art shadow-sm",
+          "aspect-[16/10] min-h-[12rem] sm:min-h-0",
           radius,
           className
         )}
@@ -68,10 +70,9 @@ export function ArticleCover({
         <Image
           src={src}
           alt={alt}
-          width={HERO_W}
-          height={HERO_H}
-          className="h-auto w-full object-cover"
-          sizes="(max-width: 768px) 100vw, 672px"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, min(672px, 100vw)"
           priority={priority}
         />
       </div>

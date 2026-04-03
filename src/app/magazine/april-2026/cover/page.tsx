@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { MagazineCoverApril2026 } from "@/components/magazine/MagazineCoverApril2026";
 import { MagazineCoverExportMount } from "@/components/magazine/MagazineCoverExportMount";
 
@@ -5,6 +6,13 @@ import { MagazineCoverExportMount } from "@/components/magazine/MagazineCoverExp
  * শুধু প্রচ্ছদ — `npm run magazine:pdf` এ ওয়েবের মতো PNG-এর জন্য।
  * সার্চ ইঞ্জিন থেকে লুকাতে চাইলে robots বা noindex যোগ করা যায়।
  */
+export const metadata: Metadata = {
+  title: "প্রচ্ছদ এক্সপোর্ট · এপ্রিল ২০২৬",
+  description:
+    "ডেটায়ন এপ্রিল ২০২৬ — অভ্যন্তরীণ প্রচ্ছদ এক্সপোর্ট (প্রিন্ট/PNG পাইপলাইন)।",
+  robots: { index: false, follow: false },
+};
+
 export default function MagazineApril2026CoverExportPage() {
   return (
     <>

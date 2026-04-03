@@ -6,8 +6,7 @@ import { APRIL_2026_META } from "@/components/magazine/data/april-2026";
 import { APPWRITE_BUCKET_MAGAZINE } from "@/lib/appwrite/constants";
 import { getApril2026Issue } from "@/lib/appwrite/queries";
 import { getStorageFileViewUrl } from "@/lib/appwrite/storage-url";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://datayon.bd";
+import { buildPageMetadata, defaultOgImages } from "@/lib/seo/page-metadata";
 
 /** আপলোডের পর ফাইল আইডি দেখতে রিভ্যালিডেশন */
 export const revalidate = 60;
@@ -18,22 +17,31 @@ export async function generateMetadata(): Promise<Metadata> {
     APPWRITE_BUCKET_MAGAZINE,
     issue?.magazineCoverFileId
   );
-  const base: Metadata = {
-    title: "সংখ্যা ০১ · এপ্রিল ২০২৬",
-    description:
-      "ডেটায়ন ম্যাগাজিন — AI, টেক নিউজ, স্টার্টআপ, ডেটা, টিউটোরিয়াল, টিপস, শেখা ও প্রোগ্রামিং। পূর্ণ সংখ্যা (প্রিন্ট/PDF)।",
-    openGraph: {
-      title: `ডেটায়ন · ${APRIL_2026_META.issueLabel} · ${APRIL_2026_META.monthLabel}`,
-      description: APRIL_2026_META.cover.deck,
-      type: "article",
-      locale: "bn_BD",
-      url: `${siteUrl.replace(/\/$/, "")}/magazine/april-2026`,
-      ...(coverOg
-        ? { images: [{ url: coverOg, width: 1200, height: 1600, alt: "ডেটায়ন এপ্রিল ২০২৬ প্রচ্ছদ" }] }
-        : {}),
-    },
-  };
-  return base;
+  const title = "সংখ্যা ০১ · এপ্রিল ২০২৬";
+  const description =
+    "ডেটায়ন ম্যাগাজিন — AI, টেক নিউজ, স্টার্টআপ, ডেটা, টিউটোরিয়াল, টিপস, শেখা ও প্রোগ্রামিং। পূর্ণ সংখ্যা (প্রিন্ট/PDF)।";
+  const ogTitle = `ডেটায়ন · ${APRIL_2026_META.issueLabel} · ${APRIL_2026_META.monthLabel}`;
+  const images = coverOg
+    ? [
+        {
+          url: coverOg,
+          width: 1200,
+          height: 1600,
+          alt: "ডেটায়ন এপ্রিল ২০২৬ প্রচ্ছদ",
+        },
+      ]
+    : defaultOgImages(`${ogTitle} · ডেটায়ন`);
+
+  return buildPageMetadata({
+    title,
+    description,
+    path: "/magazine/april-2026",
+    descriptionEn: `Datayon magazine ${APRIL_2026_META.monthLabel} — Bangla tech, AI, startups, tutorials, full issue.`,
+    openGraphTitle: ogTitle,
+    openGraphDescription: APRIL_2026_META.cover.deck,
+    ogType: "article",
+    images,
+  });
 }
 
 export default async function MagazineApril2026Page() {

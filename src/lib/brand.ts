@@ -2,7 +2,7 @@
 export const BRAND = {
   /**
    * Hind Siliguri = logo/wordmark (see `datayon_facebook_profile_logo*.html`).
-   * Tiro Bangla = long-form প্রবন্ধ body (literary Bangla serif).
+   * Tiro Bangla = long-form আর্টিকেল body (literary Bangla serif).
    * Noto Serif Bengali = section headings; Noto Sans Bengali = UI/body; DM Sans = Latin UI.
    */
   font: {

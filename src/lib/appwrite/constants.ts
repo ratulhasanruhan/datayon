@@ -2,6 +2,8 @@
 export const APPWRITE_DATABASE_ID = "main";
 export const COLLECTION_ARTICLES = "articles";
 export const COLLECTION_ISSUES = "issues";
+/** Magazine email subscribers (`name` + `email`). Created via `npm run seed:appwrite`. */
+export const COLLECTION_SUBSCRIBERS = "subscribers";
 
 /** Storage bucket for article cover images (public read). Override via env. */
 export const APPWRITE_BUCKET_COVERS =
