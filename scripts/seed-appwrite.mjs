@@ -21,6 +21,8 @@ const DB = "main";
 const ART = "articles";
 const ISS = "issues";
 const BUCKET = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_COVERS ?? "article-covers";
+const BUCKET_MAGAZINE =
+  process.env.NEXT_PUBLIC_APPWRITE_BUCKET_MAGAZINE ?? "magazine-assets";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -201,6 +203,22 @@ async function main() {
         key: "sort_order",
         required: true,
       }),
+    () =>
+      databases.createStringAttribute({
+        databaseId: DB,
+        collectionId: ISS,
+        key: "magazine_cover_file_id",
+        size: 36,
+        required: false,
+      }),
+    () =>
+      databases.createStringAttribute({
+        databaseId: DB,
+        collectionId: ISS,
+        key: "magazine_pdf_file_id",
+        size: 36,
+        required: false,
+      }),
   ];
 
   for (const fn of attrFns) {
@@ -233,6 +251,23 @@ async function main() {
       console.log("Bucket exists:", BUCKET);
     } else {
       console.warn("Bucket note:", e.message ?? e);
+    }
+  }
+
+  try {
+    await storage.createBucket({
+      bucketId: BUCKET_MAGAZINE,
+      name: "Magazine assets",
+      permissions: readAny,
+      fileSecurity: false,
+      allowedFileExtensions: ["pdf", "png"],
+    });
+    console.log("Created bucket:", BUCKET_MAGAZINE);
+  } catch (e) {
+    if (String(e.code) === "409") {
+      console.log("Bucket exists:", BUCKET_MAGAZINE);
+    } else {
+      console.warn("Magazine bucket note:", e.message ?? e);
     }
   }
 
@@ -292,7 +327,7 @@ async function main() {
       slug: "chatbot-to-agent-next",
       excerpt: "লার্জ ল্যাঙ্গুয়েজ মডেল এখন শুধু উত্তর দেয় না—কাজ করার এজেন্টে পরিণত হচ্ছে।",
       category: "বিশ্লেষণ",
-      read_time: "৫ মিনিট পড়া",
+      read_time: "৫ মিনিটে পড়ুন",
       published_at: now,
       featured: true,
       content:
@@ -303,7 +338,7 @@ async function main() {
       slug: "dhaka-tech-ecosystem-2026",
       excerpt: "ফান্ডিং, ট্যালেন্ট ও রেগুলেটরি পরিবেশ—একটি দ্রুত মানচিত্র।",
       category: "স্টার্টআপ",
-      read_time: "৬ মিনিট পড়া",
+      read_time: "৬ মিনিটে পড়ুন",
       published_at: now,
       featured: true,
       content: "স্টার্টআপ ও বিনিয়োগের প্রবণতা সংক্ষেপে।",
@@ -313,7 +348,7 @@ async function main() {
       slug: "code-as-story-interview",
       excerpt: "একজন বাংলাদেশি ডেভেলপারের সাক্ষাৎকার—কোড সংস্কৃতি ও ভবিষ্যৎ।",
       category: "সাক্ষাৎকার",
-      read_time: "৪ মিনিট পড়া",
+      read_time: "৪ মিনিটে পড়ুন",
       published_at: now,
       featured: true,
       content: "সাক্ষাৎকারের সম্পূর্ণ টেক্সট এখানে থাকবে।",
@@ -323,7 +358,7 @@ async function main() {
       slug: "cloud-security-101",
       excerpt: "ছোট দলের জন্য প্রাথমিক চেকলিস্ট।",
       category: "বিশ্লেষণ",
-      read_time: "৭ মিনিট পড়া",
+      read_time: "৭ মিনিটে পড়ুন",
       published_at: now,
       featured: false,
       content: "নিরাপত্তার মৌলিক ধাপ।",

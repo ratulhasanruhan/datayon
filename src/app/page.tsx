@@ -5,16 +5,18 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/layout/Container";
 import { ArticleCover } from "@/components/articles/ArticleCover";
 import { LogoMark } from "@/components/brand/LogoMark";
-import { MagazineIssueCard } from "@/components/home/MagazineIssueCard";
+import { HomeMagazineIssues } from "@/components/home/HomeMagazineIssues";
 import { SectionLabel } from "@/components/layout/SectionLabel";
-import { getFeaturedArticles, getLatestIssue } from "@/lib/appwrite/queries";
+import { getFeaturedArticles, getIssues } from "@/lib/appwrite/queries";
+import { isAppwriteConfigured } from "@/lib/appwrite/config";
 
 export const revalidate = 120;
 
 export default async function HomePage() {
-  const [articles, issue] = await Promise.all([
-    getFeaturedArticles(3),
-    getLatestIssue(),
+  const configured = isAppwriteConfigured();
+  const [articles, magazineIssues] = await Promise.all([
+    getFeaturedArticles(6),
+    configured ? getIssues(24) : Promise.resolve([]),
   ]);
 
   return (
@@ -78,82 +80,52 @@ export default async function HomePage() {
         <Container className="py-14 sm:py-16 lg:py-20">
           <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <SectionLabel>মাসিক · প্রচ্ছদ</SectionLabel>
+              <SectionLabel>মাসিক সংখ্যা</SectionLabel>
               <h2
                 id="mag-heading"
                 className="mt-4 font-display text-2xl font-bold text-ink sm:text-3xl"
               >
-                এই মাসের সংখ্যা
+                প্রকাশিত সংখ্যা
               </h2>
-              <p className="mt-2 font-body text-sm text-muted sm:text-base">
-                সম্পাদকীয়, প্রচ্ছদ কাহিনী ও নির্বাচিত বিশ্লেষণ।
-              </p>
             </div>
             <Link
               href="/magazine"
               className="group inline-flex items-center gap-1 font-sans text-sm font-medium text-teal transition hover:gap-2"
             >
-              আর্কাইভ
+              বছরভিত্তিক আর্কাইভ
               <span aria-hidden>→</span>
             </Link>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-14">
-            <div className="order-2 lg:order-1">
-              <p className="font-sans text-[10px] font-semibold tracking-[0.25em] text-teal">
-                {issue ? `সংখ্যা ${issue.issueNumber}` : "সংখ্যা ০১"}
-              </p>
-              <h3 className="mt-3 font-display text-xl font-bold leading-snug text-ink sm:text-2xl">
-                {issue?.headline ??
-                  "বাংলাদেশের ডেটা অর্থনীতি — কতটা প্রস্তুত আমরা?"}
-              </h3>
-              <p className="mt-4 font-body text-base leading-relaxed text-muted">
-                {issue?.excerpt ??
-                  "তথ্য প্রযুক্তির নতুন যুগে বাংলাদেশ কোথায় দাঁড়িয়ে — প্রচ্ছদ প্রবন্ধ ও নির্বাচিত বিশ্লেষণ।"}
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Button href="/magazine" variant="primary">
-                  সংখ্যা পড়ুন
-                </Button>
-                <span className="font-sans text-sm text-warm">
-                  {issue?.monthLabel ?? "এপ্রিল ২০২৬"}
-                </span>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2">
-              <MagazineIssueCard
-                issueLabel={
-                  issue
-                    ? `সংখ্যা ${issue.issueNumber} · প্রচ্ছদ কাহিনী`
-                    : "সংখ্যা ০১ · প্রচ্ছদ কাহিনী"
-                }
-                dateLabel={issue?.monthLabel ?? "এপ্রিল ২০২৬"}
-                excerpt={
-                  issue?.coverLine ||
-                  issue?.excerpt ||
-                  "ডেটা সেন্টার থেকে স্টার্টআপ — একটি বিস্তৃত চিত্র।"
-                }
-              />
-            </div>
-          </div>
+          <HomeMagazineIssues issues={magazineIssues} />
         </Container>
       </section>
 
-      <section className="border-b border-border/80" aria-labelledby="articles-heading">
-        <Container className="py-14 sm:py-16">
-          <div className="mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
+      <section
+        className="border-b border-border/80 bg-paper/80 dark:bg-paper"
+        aria-labelledby="articles-heading"
+      >
+        <Container className="py-14 sm:py-16 lg:py-20">
+          <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-xl">
               <SectionLabel>অনলাইন</SectionLabel>
               <h2
                 id="articles-heading"
-                className="mt-4 font-display text-2xl font-bold text-ink sm:text-3xl"
+                className="mt-4 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl"
               >
                 সর্বশেষ প্রবন্ধ
               </h2>
-              <p className="mt-2 font-body text-sm text-muted">
+              <p className="mt-2 font-body text-sm leading-relaxed text-muted">
                 মাসিকের বাইরেও নিয়মিত আপডেট ও মতামত।
               </p>
             </div>
+            <Link
+              href="/articles"
+              className="group inline-flex shrink-0 items-center gap-1 self-start font-sans text-sm font-medium text-teal transition hover:gap-2 sm:self-auto"
+            >
+              পুরো আর্কাইভ
+              <span aria-hidden>→</span>
+            </Link>
           </div>
 
           {articles.length === 0 ? (
@@ -167,28 +139,34 @@ export default async function HomePage() {
               </p>
             </div>
           ) : (
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-5">
               {articles.map((item, i) => (
-                <li key={item.id}>
+                <li key={item.id} className="min-w-0">
                   <article
                     className={cn(
-                      "group relative flex h-full flex-col overflow-hidden rounded-xl border border-border/80 bg-surface-elevated/90 shadow-sm transition",
-                      "hover:-translate-y-0.5 hover:border-teal/35 hover:shadow-md dark:bg-navy-mid/25"
+                      "group relative flex h-full flex-col overflow-hidden rounded-xl border border-border/70 bg-surface-elevated/95 shadow-sm ring-1 ring-border/40 transition",
+                      "hover:-translate-y-0.5 hover:border-teal/40 hover:shadow-md hover:ring-teal/20 dark:bg-navy-mid/30 dark:ring-navy2/60"
                     )}
                   >
-                    <ArticleCover
-                      coverFileId={item.coverFileId}
-                      alt={item.title}
-                      variant="card"
-                    />
-                    <div className="flex flex-1 flex-col p-5 sm:p-6">
-                      <span className="font-mono text-[10px] text-warm/80">
-                        {(i + 1).toString().padStart(2, "0")}
-                      </span>
-                      <p className="mt-3 font-sans text-[10px] font-semibold tracking-widest text-teal">
-                        {item.category}
-                      </p>
-                      <h3 className="mt-2 font-article text-[17px] font-normal leading-snug text-ink group-hover:text-teal dark:group-hover:text-teal sm:text-lg">
+                    <div className="relative overflow-hidden">
+                      <ArticleCover
+                        coverFileId={item.coverFileId}
+                        alt={item.title}
+                        variant="card"
+                        className="aspect-[4/3] sm:aspect-[16/10]"
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy-deep/20 to-transparent opacity-0 transition group-hover:opacity-100 dark:from-navy-deep/40" />
+                    </div>
+                    <div className="flex flex-1 flex-col p-3 sm:p-5">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="font-mono text-[8px] tabular-nums text-warm/70 sm:text-[10px]">
+                          {(i + 1).toString().padStart(2, "0")}
+                        </span>
+                        <span className="line-clamp-1 rounded-full bg-teal/10 px-2 py-0.5 text-center font-sans text-[8px] font-semibold uppercase tracking-wide text-teal dark:bg-teal/15 sm:text-[10px]">
+                          {item.category}
+                        </span>
+                      </div>
+                      <h3 className="mt-2 line-clamp-3 font-article text-[13px] font-normal leading-snug text-ink group-hover:text-teal dark:group-hover:text-teal sm:line-clamp-2 sm:text-[17px] sm:leading-snug lg:text-lg">
                         <Link
                           href={`/articles/${item.slug}`}
                           className="after:absolute after:inset-0 after:content-['']"
@@ -196,7 +174,12 @@ export default async function HomePage() {
                           {item.title}
                         </Link>
                       </h3>
-                      <p className="mt-4 font-sans text-[11px] text-warm">{item.readTime}</p>
+                      <p className="mt-1.5 line-clamp-2 hidden font-body text-[11px] leading-relaxed text-muted sm:mt-2 sm:block sm:text-xs">
+                        {item.excerpt}
+                      </p>
+                      <p className="mt-auto pt-2 font-sans text-[9px] text-warm sm:pt-3 sm:text-[11px]">
+                        {item.readTime}
+                      </p>
                     </div>
                   </article>
                 </li>
@@ -204,7 +187,7 @@ export default async function HomePage() {
             </ul>
           )}
 
-          <div className="mt-12 flex justify-center">
+          <div className="mt-10 flex justify-center sm:mt-12">
             <Button href="/articles" variant="ghost">
               আরও প্রবন্ধ
             </Button>

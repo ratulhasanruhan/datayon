@@ -11,6 +11,9 @@ type Props = {
   priority?: boolean;
 };
 
+const HERO_W = 1200;
+const HERO_H = 675;
+
 /** Cover image from Appwrite Storage, or editorial placeholder matching site palette. */
 export function ArticleCover({
   coverFileId,
@@ -23,10 +26,10 @@ export function ArticleCover({
 
   const ratio =
     variant === "thumb"
-      ? "aspect-[4/3] w-full max-w-[140px] sm:max-w-[176px]"
+      ? "aspect-[4/3] w-[104px] shrink-0 sm:w-full sm:max-w-[176px]"
       : variant === "card"
-        ? "aspect-[16/10] w-full"
-        : "aspect-[16/10] w-full";
+        ? "aspect-[16/10] w-full max-sm:aspect-[5/3]"
+        : "";
 
   const radius =
     variant === "card"
@@ -39,13 +42,38 @@ export function ArticleCover({
         className={cn(
           "relative overflow-hidden border border-border/50 bg-magazine-band dark:bg-navy-mid/40",
           radius,
-          ratio,
+          variant === "hero"
+            ? "aspect-[16/10] w-full min-h-[12rem] sm:min-h-[14rem]"
+            : ratio,
           className
         )}
         aria-hidden
       >
         <div className="absolute inset-0 bg-gradient-to-br from-teal/15 via-transparent to-navy/10" />
         <div className="absolute bottom-3 left-3 h-1 w-12 rounded-full bg-teal/50" />
+      </div>
+    );
+  }
+
+  /** Hero: intrinsic dimensions avoid `fill` collapsing inside flex ancestors (desktop). */
+  if (variant === "hero") {
+    return (
+      <div
+        className={cn(
+          "relative w-full overflow-hidden border border-border/40 bg-art shadow-sm",
+          radius,
+          className
+        )}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          width={HERO_W}
+          height={HERO_H}
+          className="h-auto w-full object-cover"
+          sizes="(max-width: 768px) 100vw, 672px"
+          priority={priority}
+        />
       </div>
     );
   }
@@ -66,10 +94,8 @@ export function ArticleCover({
         className="object-cover"
         sizes={
           variant === "thumb"
-            ? "(max-width: 640px) 40vw, 176px"
-            : variant === "card"
-              ? "(max-width: 768px) 100vw, 33vw"
-              : "(max-width: 768px) 100vw, 42rem"
+            ? "(max-width: 639px) 112px, 176px"
+            : "(max-width: 640px) 46vw, (max-width: 1024px) 33vw, 28vw"
         }
         priority={priority}
       />

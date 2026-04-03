@@ -86,6 +86,21 @@ export async function getIssues(limit = 12): Promise<MagazineIssue[]> {
   }, []);
 }
 
+/** সংখ্যা ০১ · এপ্রিল ২০২৬ (issue_number `০১`). */
+export async function getApril2026Issue(): Promise<MagazineIssue | null> {
+  if (!isAppwriteConfigured()) return null;
+  return safeList(async () => {
+    const db = getDatabases();
+    const res = await db.listDocuments(
+      APPWRITE_DATABASE_ID,
+      COLLECTION_ISSUES,
+      [Query.equal("issue_number", "০১"), Query.limit(1)]
+    );
+    const first = res.documents[0];
+    return first ? mapIssueDoc(first) : null;
+  }, null);
+}
+
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   if (!isAppwriteConfigured() || !slug) return null;
   return safeList(async () => {

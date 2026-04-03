@@ -25,6 +25,11 @@ export const BRAND = {
   tagline: "বাংলার প্রযুক্তি চিন্তা",
   url: "datayon.bd",
   social: "@datayon",
+  editorEmail: "editor@datayon.bd",
+  facebookUrl: "https://www.facebook.com/datayonbd",
+  /** Magazine operations / hosting context */
+  publisherUrl: "https://appibrium.tech",
+  publisherName: "Appibrium Tech",
 } as const;
 
 export type Brand = typeof BRAND;

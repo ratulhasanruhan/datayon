@@ -58,35 +58,35 @@ export default async function ArticlesPage() {
             </p>
           </div>
         ) : (
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-2.5 sm:gap-3">
             {list.map((a, i) => (
               <li key={a.id}>
                 <Link
                   href={`/articles/${a.slug}`}
-                  className="group flex flex-col gap-4 overflow-hidden rounded-xl border border-border/70 bg-surface-elevated/50 transition hover:border-teal/40 hover:bg-art/40 dark:border-navy2 dark:bg-navy-mid/20 dark:hover:bg-navy-mid/35 sm:flex-row sm:gap-6 sm:px-2 sm:py-2"
+                  className="group flex flex-row gap-3 overflow-hidden rounded-xl border border-border/70 bg-surface-elevated/50 p-3 transition hover:border-teal/40 hover:bg-art/40 dark:border-navy2 dark:bg-navy-mid/20 dark:hover:bg-navy-mid/35 sm:gap-6 sm:p-2"
                 >
-                  <div className="shrink-0 sm:pl-2 sm:pt-2">
+                  <div className="shrink-0 self-start sm:pl-2 sm:pt-2">
                     <ArticleCover
                       coverFileId={a.coverFileId}
                       alt={a.title}
                       variant="thumb"
-                      className="sm:mx-0"
+                      className="rounded-lg sm:rounded-xl"
                     />
                   </div>
-                  <div className="min-w-0 flex-1 px-5 pb-5 pt-0 sm:px-4 sm:py-4">
-                    <span className="font-mono text-xs text-warm/70">
+                  <div className="min-w-0 flex-1 py-0.5 pr-1 sm:px-4 sm:py-4">
+                    <span className="font-mono text-[10px] text-warm/70 sm:text-xs">
                       {(i + 1).toString().padStart(2, "0")}
                     </span>
-                    <p className="mt-2 font-sans text-[10px] font-semibold tracking-widest text-teal">
+                    <p className="mt-1 font-sans text-[9px] font-semibold tracking-widest text-teal sm:mt-2 sm:text-[10px]">
                       {a.category}
                     </p>
-                    <h2 className="mt-1 font-article text-xl font-normal text-ink group-hover:text-teal sm:text-2xl">
+                    <h2 className="mt-1 font-article text-[16px] font-normal leading-snug text-ink group-hover:text-teal sm:text-2xl sm:leading-tight">
                       {a.title}
                     </h2>
-                    <p className="mt-2 line-clamp-2 font-article text-sm leading-relaxed text-muted">
+                    <p className="mt-1.5 line-clamp-2 font-article text-[13px] leading-relaxed text-muted sm:mt-2 sm:text-sm">
                       {a.excerpt}
                     </p>
-                    <p className="mt-3 font-sans text-[11px] text-warm">{a.readTime}</p>
+                    <p className="mt-2 font-sans text-[10px] text-warm sm:mt-3 sm:text-[11px]">{a.readTime}</p>
                   </div>
                 </Link>
               </li>

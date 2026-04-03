@@ -157,3 +157,84 @@ body {
 .dark .texture-grain::after {
   opacity: 0.06;
 }
+
+/* কভার এক্সপোর্ট পেজ — হেডার/ফুটার ছাড়া পূর্ণ প্রস্থ */
+body.magazine-cover-export header,
+body.magazine-cover-export footer {
+  display: none !important;
+}
+
+body.magazine-cover-export .flex.min-h-0 {
+  flex: 1 1 auto !important;
+  min-height: 100vh !important;
+}
+
+/* মাসিক পূর্ণ সংখ্যা — প্রিন্ট / PDF (Playwright page.pdf বা ব্রাউজার প্রিন্ট) */
+@media print {
+  /* পাতার বাইরে অতিরিক্ত সাদা রেখা এড়াতে: @page মার্জিন ০, ভিতরের প্যাডিং শিটে */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    background: #f0ebe0 !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.magazine-issue-print {
+    background: #f0ebe0 !important;
+  }
+
+  /* সরাসরি body-র সন্তান নয় — অবতীর্ণ সিলেক্টর */
+  body.magazine-issue-print header,
+  body.magazine-issue-print footer,
+  body.magazine-issue-print .no-print {
+    display: none !important;
+  }
+
+  body.magazine-issue-print .flex.min-h-0 {
+    display: block !important;
+    min-height: 0 !important;
+  }
+
+  .magazine-print-root {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #f0ebe0 !important;
+  }
+
+  /* প্রতিটি শিটে নিরাপদ ভিতরের মার্জিন — পাতার ধারে সাদা ব্যান্ড নয় */
+  body.magazine-issue-print .magazine-print-root .magazine-sheet {
+    box-sizing: border-box !important;
+    padding-left: 14mm !important;
+    padding-right: 14mm !important;
+    padding-top: 12mm !important;
+    padding-bottom: 12mm !important;
+  }
+
+  .magazine-sheet {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .magazine-print-root .no-print {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .magazine-print-root section.magazine-sheet:last-of-type {
+    break-after: auto;
+    page-break-after: auto;
+  }
+}

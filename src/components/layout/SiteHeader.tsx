@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/cn";
 import { LogoLockup } from "@/components/brand/LogoLockup";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
@@ -79,23 +78,6 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-paper/90 shadow-[0_1px_0_rgba(13,27,42,0.04)] backdrop-blur-md dark:shadow-[0_1px_0_rgba(0,0,0,0.25)]">
-      <div
-        className={cn(
-          "border-b border-border/60 bg-navy py-1.5 text-center",
-          "dark:border-navy2 dark:bg-navy-deep"
-        )}
-      >
-        <p className="font-brand text-[10px] font-medium tracking-[0.18em] text-cream/90">
-          {BRAND.tagline}
-          <span className="mx-2 text-cream/40" aria-hidden>
-            ·
-          </span>
-          <span className="font-mono text-[9px] tracking-normal text-teal/90">
-            {BRAND.url}
-          </span>
-        </p>
-      </div>
-
       <div className="mx-auto flex h-[56px] max-w-[1200px] items-center justify-between gap-2 px-4 sm:h-[60px] sm:px-6 lg:px-8">
         <Link
           href="/"

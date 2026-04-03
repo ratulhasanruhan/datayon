@@ -22,11 +22,32 @@ export default function AboutPage() {
           </h1>
           <p className="mt-4 font-brand text-lg font-medium text-muted">{BRAND.tagline}</p>
           <p className="mt-10 font-body text-lg leading-[1.9] text-ink/90">
-            <strong>{BRAND.name}</strong> একটি বাংলা প্রযুক্তি ম্যাগাজিন। আমরা
-            বাংলাদেশ ও বাংলা ভাষার টেক দুনিয়ার খবর, বিশ্লেষণ ও গল্প তুলে ধরতে
-            চাই — পরিষ্কার ভাষায়, সম্মানজনক নকশায়।
+            <strong>{BRAND.name}</strong> একটি বাংলা প্রযুক্তি ম্যাগাজিন। এই প্রকল্পটি{" "}
+            <a
+              href={BRAND.publisherUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-teal underline-offset-4 hover:underline"
+            >
+              {BRAND.publisherName}
+            </a>{" "}
+            পরিচালিত ও রক্ষণাবেক্ষণ করে; সম্পাদনা, অনুবাদ ও প্রকাশনায় স্বেচ্ছাসেবকদের অংশগ্রহণ রয়েছে।
+            আমরা বাংলাদেশ ও বাংলা ভাষার টেক দুনিয়ার খবর, বিশ্লেষণ ও গল্প তুলে ধরতে চাই — পরিষ্কার
+            ভাষায়, সম্মানজনক নকশায়।
+          </p>
+          <p className="mt-6 font-body text-lg leading-[1.9] text-ink/90">
+            আপনি যদি দলে যোগ দিতে চান, লেখা বা অনুবাদ পাঠাতে চান, অথবা প্রকাশের জন্য উপযুক্ত বিষয়
+            জমা দিতে চান — আমাদের লিখুন। সংক্ষিপ্ত পরিচিতি ও কাজের নমুনা সহ ইমেইল করুন।
           </p>
           <p className="mt-6 font-body text-base leading-[1.9] text-muted">
+            ইমেইল:{" "}
+            <a
+              href={`mailto:${BRAND.editorEmail}`}
+              className="font-mono text-teal underline-offset-4 hover:underline"
+            >
+              {BRAND.editorEmail}
+            </a>
+            <br />
             ওয়েবসাইট:{" "}
             <a
               href={`https://${BRAND.url}`}

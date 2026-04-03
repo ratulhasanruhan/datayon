@@ -33,5 +33,14 @@ export function mapIssueDoc(doc: Models.Document): MagazineIssue {
     excerpt: String(d.excerpt ?? ""),
     coverLine: String(d.cover_line ?? ""),
     sortOrder: Number(d.sort_order ?? 0),
+    magazineCoverFileId:
+      d.magazine_cover_file_id != null &&
+      String(d.magazine_cover_file_id).length > 0
+        ? String(d.magazine_cover_file_id)
+        : undefined,
+    magazinePdfFileId:
+      d.magazine_pdf_file_id != null && String(d.magazine_pdf_file_id).length > 0
+        ? String(d.magazine_pdf_file_id)
+        : undefined,
   };
 }

@@ -94,14 +94,14 @@ export default async function ArticlePage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <article className="py-12 sm:py-16 lg:py-20">
+      <article className="relative z-[1] py-12 sm:py-16 lg:py-20">
         <Container className="max-w-2xl">
           <ArticleCover
             coverFileId={article.coverFileId}
             alt={article.title}
             variant="hero"
             priority
-            className="mb-10"
+            className="mb-10 w-full"
           />
 
           <SectionLabel>{article.category}</SectionLabel>

@@ -22,4 +22,8 @@ export type MagazineIssue = {
   excerpt: string;
   coverLine: string;
   sortOrder: number;
+  /** `magazine-assets` bucket — exported cover PNG */
+  magazineCoverFileId?: string;
+  /** `magazine-assets` bucket — full issue PDF */
+  magazinePdfFileId?: string;
 };
