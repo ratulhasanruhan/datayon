@@ -34,11 +34,6 @@ export default async function MagazinePage() {
           <h1 className="mt-5 font-display text-4xl font-black tracking-tight text-ink sm:text-5xl">
             সংখ্যাসমূহ
           </h1>
-          <p className="mt-4 font-body text-lg leading-relaxed text-muted">
-            প্রতি সংখ্যায় <strong className="font-medium text-ink">মাস ও বছর</strong> (যেমন{" "}
-            <span className="font-display">এপ্রিল ২০২৬</span>) স্পষ্টভাবে দেখানো হয়েছে। বছর অনুযায়ী
-            গোষ্ঠীবদ্ধ আর্কাইভ।
-          </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/"
