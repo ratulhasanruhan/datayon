@@ -12,7 +12,7 @@ import { isAppwriteConfigured } from "@/lib/appwrite/config";
 import { BRAND } from "@/lib/brand";
 import { buildPageMetadata, DEFAULT_OG_IMAGE_PATH } from "@/lib/seo/page-metadata";
 import { formatBnDateLong } from "@/lib/locale/bn-date";
-import { SEO_KEYWORDS, SITE_URL, publisherLogoAbsoluteUrl } from "@/lib/seo/site";
+import { SEO_KEYWORDS, SITE_URL, publisherLogoPngAbsoluteUrl } from "@/lib/seo/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -109,7 +109,7 @@ export default async function ArticlePage({ params }: Props) {
   const pageUrl = `${SITE_URL}/articles/${slug}`;
   const coverUrl = getArticleCoverUrl(article.coverFileId);
   const orgId = `${SITE_URL}/#organization`;
-  const publisherLogoUrl = publisherLogoAbsoluteUrl();
+  const publisherLogoUrl = publisherLogoPngAbsoluteUrl();
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -138,7 +138,7 @@ export default async function ArticlePage({ params }: Props) {
         "@type": "ImageObject",
         url: publisherLogoUrl,
         contentUrl: publisherLogoUrl,
-        encodingFormat: "image/svg+xml",
+        encodingFormat: "image/png",
       },
     },
     ...(coverUrl
@@ -151,6 +151,31 @@ export default async function ArticlePage({ params }: Props) {
       : {}),
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "প্রচ্ছদ",
+        item: `${SITE_URL}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "আর্টিকেল",
+        item: `${SITE_URL}/articles`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.title,
+        item: pageUrl,
+      },
+    ],
+  };
+
   return (
     <main
       id="main"
@@ -159,6 +184,10 @@ export default async function ArticlePage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <article className="relative z-[1] py-12 sm:py-16 lg:py-20">
         <Container className="max-w-2xl">

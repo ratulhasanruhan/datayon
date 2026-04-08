@@ -15,10 +15,16 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "bn",
     icons: [
       {
-        src: "/brand/datayon-mark.svg",
-        type: "image/svg+xml",
-        sizes: "any",
-        purpose: "any",
+        src: "/web-app-manifest-192x192.png",
+        type: "image/png",
+        sizes: "192x192",
+        purpose: "any maskable",
+      },
+      {
+        src: "/web-app-manifest-512x512.png",
+        type: "image/png",
+        sizes: "512x512",
+        purpose: "any maskable",
       },
     ],
   };

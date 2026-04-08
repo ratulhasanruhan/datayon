@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   turbopack: {},
   poweredByHeader: false,
   images: {
+    /** Prefer modern formats when the browser supports them. */
+    formats: ["image/avif", "image/webp"],
+    /**
+     * Remote covers from Appwrite are stable; allow a reasonable minimum cache TTL.
+     * (CDNs/browsers may cache longer based on upstream headers.)
+     */
+    minimumCacheTTL: 60,
     remotePatterns: [
       {
         protocol: "https",

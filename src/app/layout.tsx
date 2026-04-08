@@ -62,6 +62,10 @@ export const metadata: Metadata = {
   ...(siteVerification
     ? { verification: { google: siteVerification } }
     : {}),
+  appleWebApp: {
+    title: BRAND.name,
+    capable: true,
+  },
   title: {
     default: `${BRAND.name} — ${BRAND.tagline}`,
     template: `%s · ${BRAND.name}`,
@@ -125,8 +129,30 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/brand/datayon-mark.svg",
-    apple: "/brand/datayon-mark.svg",
+    icon: [
+      {
+        url: "/favicon.ico",
+        type: "image/x-icon",
+        sizes: "32x32",
+      },
+      {
+        url: "/web-app-manifest-192x192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
+      {
+        url: "/web-app-manifest-512x512.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+    apple: [
+      {
+        url: "/web-app-manifest-192x192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
+    ],
   },
   other: {
     "msapplication-TileColor": "#0d1b2a",
