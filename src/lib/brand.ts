@@ -28,7 +28,7 @@ export const BRAND = {
   editorEmail: "editor@datayon.bd",
   facebookUrl: "https://www.facebook.com/datayonbd",
   /** Magazine operations / hosting context */
-  publisherUrl: "https://appibrium.tech",
+  publisherUrl: "https://appibrium.com",
   publisherName: "Appibrium Tech",
 } as const;
 
